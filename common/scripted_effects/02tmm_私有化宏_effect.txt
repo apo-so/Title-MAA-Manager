@@ -1,0 +1,34 @@
+# ===================================================
+# 功能：头衔兵士私有化宏 — 将头衔兵转化为个人常备军
+# 说明：通过清洗重建（create→copy→destroy）将头衔兵士从编制中剥离为私兵
+# ===================================================
+tmm_privatize_maa = {
+	hidden_effect = {
+		create_maa_regiment = {
+			type_of = scope:old_regiment
+			check_can_recruit = no
+			size = 200
+		}
+
+		random_maa_regiment = {
+			limit = {
+				maa_size = 200
+				NOT = {
+					is_title_maa_regiment = yes
+				}
+			}
+
+			change_maa_regiment_size = scope:old_regiment.maa_size
+			change_maa_regiment_size = -200
+
+			change_maa_troops_count = {
+				value = scope:old_regiment.maa_current_troops_count
+				subtract = maa_current_troops_count
+			}
+		}
+
+		scope:old_regiment = {
+			destroy_maa_regiment = yes
+		}
+	}
+}
