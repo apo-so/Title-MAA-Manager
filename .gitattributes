@@ -1,0 +1,13 @@
+# CK3 脚本和本地化文件可能依赖原始 BOM / CRLF；
+# 禁止 Git 自动修改这些文件的换行格式。
+*.txt -text
+*.gui -text
+*.yml -text
+*.yaml -text
+*.mod -text
+*.asset -text
+*.gfx -text
+*.script -text
+
+# 仓库说明类 Markdown 统一 LF
+*.md text eol=lf
