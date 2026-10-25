@@ -1,0 +1,46 @@
+﻿# ===================================================
+# 功能：收天下兵 — 一键收回所有封臣的头衔兵士
+# 说明：遍历所有封臣，将其持有的全部头衔兵士集中至玩家主头衔
+# ===================================================
+tmm_revoke_all_vassals_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_invite_knights.dds" }
+	title = tmm_revoke_all_vassals_decision
+	desc = tmm_revoke_all_vassals_decision_desc
+	selection_tooltip = tmm_revoke_all_vassals_decision_tooltip
+	confirm_text = tmm_revoke_all_vassals_decision_confirm
+
+	is_shown = {
+		is_ai = no
+		any_vassal_or_below = {
+			always = yes
+		}
+	}
+
+	is_valid = {
+		any_vassal_or_below = {
+			any_held_title = {
+				any_owned_title_maa_regiment = {
+					is_title_maa_regiment = yes
+				}
+			}
+		}
+	}
+
+	effect = {
+		save_scope_as = tmm_maa_receiver
+
+		every_vassal_or_below = {
+			tmm_revoke_all_maa_from_character = yes
+		}
+	}
+
+	ai_potential = {
+		always = no
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+
+	ai_check_interval = 1
+}
