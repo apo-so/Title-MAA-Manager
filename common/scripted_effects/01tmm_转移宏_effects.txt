@@ -1,0 +1,160 @@
+# ===================================================
+# 功能：头衔兵士转移宏（向下部署 / 向上收回）
+# 说明：通过清洗重建（create→copy size→destroy）实现兵士在不同头衔间的安全转移
+# ===================================================
+
+# --- 向下部署：旧兵团 → scope:target（目标地方头衔） ---
+tmm_transfer_maa_down = {
+    # 可以在这里添加扣费效果，例如：
+    # remove_short_term_gold = 500
+
+    hidden_effect = {
+
+        # 1. 在目标头衔创建一支临时规模为 200 的头衔兵士
+        create_maa_regiment = {
+            type_of = scope:old_regiment
+            check_can_recruit = no
+            title = scope:target
+            size = 200
+        }
+
+        # 2. 找到刚刚创建的那支目标头衔兵士
+        scope:target = {
+            random_title_maa_regiment = {
+                limit = {
+                    maa_size = 200
+                    is_title_maa_regiment = yes
+                }
+
+                # 3. 把规模从 200 改成旧兵团规模
+                # 公式：200 + old_size - 200 = old_size
+                change_maa_regiment_size = scope:old_regiment.maa_size
+                change_maa_regiment_size = -200
+
+                # 4. 同步当前兵员数量
+                change_maa_troops_count = {
+                    value = scope:old_regiment.maa_current_troops_count
+                    subtract = maa_current_troops_count
+                }
+            }
+        }
+
+        # 5. 销毁旧兵团
+        scope:old_regiment = {
+            destroy_maa_regiment = yes
+        }
+    }
+}
+
+# --- 向上收回：旧兵团 → scope:actor.primary_title（首都头衔） ---
+tmm_transfer_maa_up = {
+    # 可以在这里添加扣费效果，例如：
+    # remove_short_term_gold = 500
+
+    hidden_effect = {
+
+        # 1. 在首都头衔创建一支临时规模为 200 的头衔兵士
+        create_maa_regiment = {
+            type_of = scope:old_regiment
+            check_can_recruit = no
+            title = scope:actor.primary_title
+            size = 200
+        }
+
+        # 2. 找到刚刚创建的那支首都头衔兵士
+        scope:actor.primary_title = {
+            random_title_maa_regiment = {
+                limit = {
+                    maa_size = 200
+                    is_title_maa_regiment = yes
+                }
+
+                # 3. 把规模从 200 改成旧兵团规模
+                # 公式：200 + old_size - 200 = old_size
+                change_maa_regiment_size = scope:old_regiment.maa_size
+                change_maa_regiment_size = -200
+
+                # 4. 同步当前兵员数量
+                change_maa_troops_count = {
+                    value = scope:old_regiment.maa_current_troops_count
+                    subtract = maa_current_troops_count
+                }
+            }
+        }
+
+        # 5. 销毁旧兵团
+        scope:old_regiment = {
+            destroy_maa_regiment = yes
+        }
+    }
+}
+
+# --- 向下部署（目标头衔版）：旧兵团 → scope:target_title（由调用方通过 save_temporary_scope_as 设定） ---
+# 说明：配合 men_at_arms 目标类型的指派兵权互动使用，目标头衔由 on_accept 中的 scope:target_title 决定
+tmm_army_transfer_title_maa = {
+    if = {
+        limit = { exists = scope:target_title }
+        hidden_effect = {
+        # 1. 在目标头衔创建一支临时规模为 200 的同类型头衔兵士
+        create_maa_regiment = {
+            type_of = scope:old_regiment
+            check_can_recruit = no
+            title = scope:target_title
+            size = 200
+        }
+
+        # 2. 找到刚刚创建的那支目标头衔兵士
+        scope:target_title = {
+            random_title_maa_regiment = {
+                limit = {
+                    maa_size = 200
+                    is_title_maa_regiment = yes
+                }
+
+                # 3. 把规模从 200 改成旧兵团规模
+                change_maa_regiment_size = scope:old_regiment.maa_size
+                change_maa_regiment_size = -200
+
+                # 4. 同步当前兵员数量
+                change_maa_troops_count = {
+                    value = scope:old_regiment.maa_current_troops_count
+                    subtract = maa_current_troops_count
+                }
+            }
+        }
+
+        # 5. 销毁旧兵团
+        scope:old_regiment = {
+            destroy_maa_regiment = yes
+        }
+    }
+    }
+}
+
+# === 个人私兵 → 头衔兵士（吃皇粮）===
+owned_army_transfer_title_maa = {
+    hidden_effect = {
+        create_maa_regiment = {
+            type_of = scope:old_regiment
+            check_can_recruit = no
+            title = scope:target_title
+            size = 200
+        }
+        scope:target_title = {
+            random_title_maa_regiment = {
+                limit = {
+                    maa_size = 200
+                }
+                change_maa_regiment_size = scope:old_regiment.maa_size
+                change_maa_regiment_size = -200
+                change_maa_troops_count = {
+                    value = scope:old_regiment.maa_current_troops_count
+                    subtract = maa_current_troops_count
+                }
+            }
+        }
+        scope:old_regiment = {
+            destroy_maa_regiment = yes
+        }
+    }
+}
