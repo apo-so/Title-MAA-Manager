@@ -1,0 +1,54 @@
+﻿# Character scope. Native Create has already paid; this only relocates its unique new regiment.
+tmm_recruit_move_created_effect = {
+    every_in_list = { list = tmm_recruit_target_before remove_from_list = tmm_recruit_target_before }
+    scope:tmm_recruit_target = {
+        every_owned_title_maa_regiment = { add_to_list = tmm_recruit_target_before }
+    }
+    set_variable = { name = tmm_recruit_destination_count value = 0 }
+    clear_saved_scope = tmm_recruit_destination_regiment
+    create_maa_regiment = {
+        type_of = scope:tmm_recruit_source_regiment
+        title = scope:tmm_recruit_target
+        check_can_recruit = no
+        size = 1
+    }
+    scope:tmm_recruit_target = {
+        every_owned_title_maa_regiment = {
+            limit = { NOT = { is_in_list = tmm_recruit_target_before } }
+            save_temporary_scope_as = tmm_recruit_destination_regiment
+            scope:tmm_recruit_actor = { change_variable = { name = tmm_recruit_destination_count add = 1 } }
+        }
+    }
+    if = {
+        limit = { var:tmm_recruit_destination_count = 1 exists = scope:tmm_recruit_destination_regiment }
+        scope:tmm_recruit_destination_regiment = {
+            change_maa_regiment_size = scope:tmm_recruit_source_regiment.maa_size
+            change_maa_regiment_size = -1
+            change_maa_troops_count = {
+                value = scope:tmm_recruit_source_regiment.maa_current_troops_count
+                subtract = maa_current_troops_count
+            }
+        }
+        if = {
+            limit = {
+                scope:tmm_recruit_destination_regiment = {
+                    regiment_owning_title = scope:tmm_recruit_target
+                    regiment_controlling_title = scope:tmm_recruit_target
+                    maa_size = scope:tmm_recruit_source_regiment.maa_size
+                    maa_current_troops_count = scope:tmm_recruit_source_regiment.maa_current_troops_count
+                }
+            }
+            scope:tmm_recruit_source_regiment = { destroy_maa_regiment = yes }
+            set_variable = { name = tmm_recruit_success value = yes }
+            remove_variable = tmm_recruit_failed
+        }
+        else = {
+            # This exact destination regiment was created above; keep the paid source intact.
+            scope:tmm_recruit_destination_regiment = { destroy_maa_regiment = yes }
+            set_variable = { name = tmm_recruit_failed value = yes }
+        }
+    }
+    else = { set_variable = { name = tmm_recruit_failed value = yes } }
+    every_in_list = { list = tmm_recruit_target_before remove_from_list = tmm_recruit_target_before }
+    remove_variable = tmm_recruit_destination_count
+}

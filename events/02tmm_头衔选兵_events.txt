@@ -1,0 +1,227 @@
+# ===================================================
+# 功能：头衔选兵事件（实验版：三选联动）— 从指定头衔的兵团中精准选一支收回
+# 说明：immediate 块遍历 scope:tmm_selected_title 的 every_owned_title_maa_regiment，
+#       用 if/else_if 链保存最多 12 个 scope（selected_maa_1 到 selected_maa_12）；
+#       12 个 option 各引用一个 scope，hidden_effect 调用 tmm_transfer_maa_up 宏执行转移
+# 注意：tmm_transfer_maa_up 宏上下文要求 scope:old_regiment = 旧兵团，scope:actor = 接收者
+# ===================================================
+namespace = tmm_select_maa
+
+tmm_select_maa.0001 = {
+    type = character_event
+    title = tmm_select_maa.0001.t
+    desc = tmm_select_maa.0001.desc
+    theme = war
+
+    left_portrait = root
+    right_portrait = scope:tmm_vassal
+
+    # =====================================================
+    # immediate：遍历目标头衔的所有兵团，逐个存入临时 scope
+    # =====================================================
+    immediate = {
+        scope:tmm_selected_title = {
+            every_owned_title_maa_regiment = {
+                if = {
+                    limit = { NOT = { exists = scope:selected_maa_1 } }
+                    save_temporary_scope_as = selected_maa_1
+                }
+                else_if = {
+                    limit = { NOT = { exists = scope:selected_maa_2 } }
+                    save_temporary_scope_as = selected_maa_2
+                }
+                else_if = {
+                    limit = { NOT = { exists = scope:selected_maa_3 } }
+                    save_temporary_scope_as = selected_maa_3
+                }
+                else_if = {
+                    limit = { NOT = { exists = scope:selected_maa_4 } }
+                    save_temporary_scope_as = selected_maa_4
+                }
+                else_if = {
+                    limit = { NOT = { exists = scope:selected_maa_5 } }
+                    save_temporary_scope_as = selected_maa_5
+                }
+                else_if = {
+                    limit = { NOT = { exists = scope:selected_maa_6 } }
+                    save_temporary_scope_as = selected_maa_6
+                }
+                else_if = {
+                    limit = { NOT = { exists = scope:selected_maa_7 } }
+                    save_temporary_scope_as = selected_maa_7
+                }
+                else_if = {
+                    limit = { NOT = { exists = scope:selected_maa_8 } }
+                    save_temporary_scope_as = selected_maa_8
+                }
+                else_if = {
+                    limit = { NOT = { exists = scope:selected_maa_9 } }
+                    save_temporary_scope_as = selected_maa_9
+                }
+                else_if = {
+                    limit = { NOT = { exists = scope:selected_maa_10 } }
+                    save_temporary_scope_as = selected_maa_10
+                }
+                else_if = {
+                    limit = { NOT = { exists = scope:selected_maa_11 } }
+                    save_temporary_scope_as = selected_maa_11
+                }
+                else_if = {
+                    limit = { NOT = { exists = scope:selected_maa_12 } }
+                    save_temporary_scope_as = selected_maa_12
+                }
+            }
+        }
+    }
+
+    # =====================================================
+    # --- 选项1：兵团1 ---
+    # =====================================================
+    option = {
+        name = tmm_select_maa.0001.option
+        trigger = { exists = scope:selected_maa_1 }
+        hidden_effect = {
+            scope:selected_maa_1 = { save_temporary_scope_as = old_regiment }
+            scope:actor = { tmm_transfer_maa_up = yes }
+        }
+    }
+
+    # =====================================================
+    # --- 选项2：兵团2 ---
+    # =====================================================
+    option = {
+        name = tmm_select_maa.0001.option
+        trigger = { exists = scope:selected_maa_2 }
+        hidden_effect = {
+            scope:selected_maa_2 = { save_temporary_scope_as = old_regiment }
+            scope:actor = { tmm_transfer_maa_up = yes }
+        }
+    }
+
+    # =====================================================
+    # --- 选项3：兵团3 ---
+    # =====================================================
+    option = {
+        name = tmm_select_maa.0001.option
+        trigger = { exists = scope:selected_maa_3 }
+        hidden_effect = {
+            scope:selected_maa_3 = { save_temporary_scope_as = old_regiment }
+            scope:actor = { tmm_transfer_maa_up = yes }
+        }
+    }
+
+    # =====================================================
+    # --- 选项4：兵团4 ---
+    # =====================================================
+    option = {
+        name = tmm_select_maa.0001.option
+        trigger = { exists = scope:selected_maa_4 }
+        hidden_effect = {
+            scope:selected_maa_4 = { save_temporary_scope_as = old_regiment }
+            scope:actor = { tmm_transfer_maa_up = yes }
+        }
+    }
+
+    # =====================================================
+    # --- 选项5：兵团5 ---
+    # =====================================================
+    option = {
+        name = tmm_select_maa.0001.option
+        trigger = { exists = scope:selected_maa_5 }
+        hidden_effect = {
+            scope:selected_maa_5 = { save_temporary_scope_as = old_regiment }
+            scope:actor = { tmm_transfer_maa_up = yes }
+        }
+    }
+
+    # =====================================================
+    # --- 选项6：兵团6 ---
+    # =====================================================
+    option = {
+        name = tmm_select_maa.0001.option
+        trigger = { exists = scope:selected_maa_6 }
+        hidden_effect = {
+            scope:selected_maa_6 = { save_temporary_scope_as = old_regiment }
+            scope:actor = { tmm_transfer_maa_up = yes }
+        }
+    }
+
+    # =====================================================
+    # --- 选项7：兵团7 ---
+    # =====================================================
+    option = {
+        name = tmm_select_maa.0001.option
+        trigger = { exists = scope:selected_maa_7 }
+        hidden_effect = {
+            scope:selected_maa_7 = { save_temporary_scope_as = old_regiment }
+            scope:actor = { tmm_transfer_maa_up = yes }
+        }
+    }
+
+    # =====================================================
+    # --- 选项8：兵团8 ---
+    # =====================================================
+    option = {
+        name = tmm_select_maa.0001.option
+        trigger = { exists = scope:selected_maa_8 }
+        hidden_effect = {
+            scope:selected_maa_8 = { save_temporary_scope_as = old_regiment }
+            scope:actor = { tmm_transfer_maa_up = yes }
+        }
+    }
+
+    # =====================================================
+    # --- 选项9：兵团9 ---
+    # =====================================================
+    option = {
+        name = tmm_select_maa.0001.option
+        trigger = { exists = scope:selected_maa_9 }
+        hidden_effect = {
+            scope:selected_maa_9 = { save_temporary_scope_as = old_regiment }
+            scope:actor = { tmm_transfer_maa_up = yes }
+        }
+    }
+
+    # =====================================================
+    # --- 选项10：兵团10 ---
+    # =====================================================
+    option = {
+        name = tmm_select_maa.0001.option
+        trigger = { exists = scope:selected_maa_10 }
+        hidden_effect = {
+            scope:selected_maa_10 = { save_temporary_scope_as = old_regiment }
+            scope:actor = { tmm_transfer_maa_up = yes }
+        }
+    }
+
+    # =====================================================
+    # --- 选项11：兵团11 ---
+    # =====================================================
+    option = {
+        name = tmm_select_maa.0001.option
+        trigger = { exists = scope:selected_maa_11 }
+        hidden_effect = {
+            scope:selected_maa_11 = { save_temporary_scope_as = old_regiment }
+            scope:actor = { tmm_transfer_maa_up = yes }
+        }
+    }
+
+    # =====================================================
+    # --- 选项12：兵团12 ---
+    # =====================================================
+    option = {
+        name = tmm_select_maa.0001.option
+        trigger = { exists = scope:selected_maa_12 }
+        hidden_effect = {
+            scope:selected_maa_12 = { save_temporary_scope_as = old_regiment }
+            scope:actor = { tmm_transfer_maa_up = yes }
+        }
+    }
+
+    # =====================================================
+    # --- 选项：取消 ---
+    # =====================================================
+    option = {
+        name = tmm_select_maa.0001.cancel
+    }
+}

@@ -1,0 +1,69 @@
+# ===================================================
+# 功能：收集封臣兵权（精准版）
+# 说明：玩家从封臣的头衔兵池中精准选定一支兵团，收回至自己主头衔下。使用 men_at_arms 目标类型，可选支付金币补偿封臣。
+# 基于参考 mod 的 find_best_maa_interaction，已修复 random_held_title 为 primary_title。
+# ===================================================
+tmm_collect_maa_from_vassal_interaction = {
+
+	# --- 基础交互设置 ---
+	category = interaction_category_diplomacy
+	target_type = men_at_arms
+	target_filter = recipient_title_maa
+	icon = request_maa_interaction
+	common_interaction = no
+	interface_priority = 115
+	desc = tmm_collect_maa_from_vassal_interaction_desc
+	auto_accept = yes
+	ai_frequency = 0
+
+	# --- 可用条件 ---
+	is_available = { always = yes }
+
+	# --- 交互是否显示 ---
+	is_shown = {
+		NOT = { scope:actor = scope:recipient }
+
+		scope:recipient = {
+			is_vassal_or_below_of = scope:actor
+
+			# 封臣存在带兵头衔
+			any_held_title = {
+				any_owned_title_maa_regiment = {
+					count >= 1
+				}
+			}
+		}
+
+		scope:actor = {
+			is_ai = no
+		}
+	}
+
+	# --- 目标有效性提示 ---
+	is_valid_showing_failures_only = {
+		scope:recipient = {
+			NOT = { is_at_war_with = scope:actor }
+		}
+	}
+
+	# --- 执行 ---
+	on_accept = {
+		# 1. 将玩家主头衔保存为 target_title（修复 random_held_title → primary_title）
+		scope:actor = {
+			primary_title = {
+				save_temporary_scope_as = target_title
+			}
+		}
+
+		# 2. 将选中的封臣头衔兵士转移至玩家主头衔
+		scope:target = {
+			transfer_title_maa = scope:target_title
+			save_temporary_scope_as = old_regiment
+		}
+
+		# 3. 执行清洗重建转移（创建副本 → 复制规模与兵力 → 销毁原兵团）
+		scope:actor = {
+			tmm_army_transfer_title_maa = yes
+		}
+	}
+}

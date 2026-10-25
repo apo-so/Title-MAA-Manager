@@ -1,0 +1,50 @@
+# ===================================================
+# 功能：借兵 — 将头衔常备军控制权暂时移交给目标角色
+# 说明：选择自身头衔，将其非个人常备军转移至目标角色的主头衔
+# ===================================================
+tmm_lend_maa_interaction = {
+	category = interaction_category_diplomacy
+	target_type = title
+	target_filter = actor_domain_titles # 选我自己的头衔
+	
+	icon = request_maa_interaction
+	# 借兵由发起者主动移交兵权，不再等待接收者答复。
+	auto_accept = yes
+	desc = tmm_lend_maa_interaction_desc
+
+	is_shown = {
+		scope:recipient = { 
+			#is_landed = yes 
+			is_alive = yes
+		}
+	}
+
+	has_valid_target_showing_failures_only = {
+		scope:target = {
+			any_owned_title_maa_regiment = { count >= 1 is_personal_maa_regiment = no }
+		}
+	}
+
+	on_accept = {
+		scope:target = {
+			every_owned_title_maa_regiment = {
+				limit = { is_personal_maa_regiment = no }
+				
+				# 【关键修正】
+				# 不要直接转给 recipient（角色），而是转给 recipient 的主头衔（primary_title）。
+				# 这样兵士就挂到了对方的主头衔名下，控制权自然归他。
+				transfer_title_maa = scope:recipient.primary_title
+			}
+		}
+		
+		# Toast 提示保持不变
+		scope:actor = {
+			send_interface_toast = {
+				title = "LEND_MAA_DONE_TITLE"
+				left_icon = scope:target
+				right_icon = scope:recipient
+				custom_tooltip = "LEND_MAA_DONE_DESC"
+			}
+		}
+	}
+}

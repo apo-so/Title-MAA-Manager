@@ -1,0 +1,9 @@
+﻿l_simp_chinese:
+ TMM_COMPAT_OPEN_NATIVE_RECRUITMENT:0 "在此创建兵士"
+ TMM_COMPAT_OPEN_NATIVE_RECRUITMENT_TOOLTIP:0 "将此头衔设为新兵团的归属地。接着选择承担招募的来源头衔，按原版费用创建；新兵团会自动归入这里。此目标无需出现在原版招募列表中。"
+ tmm_recruit_target_hint:0 "创建目标：[GetPlayer.MakeScope.Var('tmm_recruit_target').Title.GetName]\n请选择承担本次招募的来源头衔；按原版收费后，新兵团会自动归入上面的目标。"
+ tmm_recruit_window_hint:0 "新兵团将归入：[GetPlayer.MakeScope.Var('tmm_recruit_target').Title.GetName]\n费用由当前原版招募窗口计算并收取，不另收转移费。"
+ tmm_recruit_cancel:0 "取消目标创建"
+ tmm_recruit_success:0 "新兵团已归入所选目标头衔。"
+ tmm_recruit_failed:0 "未能确认兵团送达。已创建的来源兵团会保留，不会再次收取创建费。"
+ tmm_recruit_target_label:0 "归属：[GetPlayer.MakeScope.Var('tmm_recruit_target').Title.GetName]"

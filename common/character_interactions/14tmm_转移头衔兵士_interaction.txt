@@ -1,0 +1,79 @@
+# ===================================================
+# 功能：转移头衔兵士 V5（天下兵马）
+# 说明：右键封臣 → 自动标记其所有带兵头衔 → 打开窗口 → 选头衔 → 点兵团转移
+#       关闭窗口时自动清除所有标记（不留持久状态）
+# ===================================================
+tmm_select_title_maa_interaction = {
+    category = interaction_category_diplomacy
+    icon = request_maa_interaction
+    common_interaction = yes
+    interface_priority = 120
+    desc = tmm_select_title_maa_interaction_desc
+    auto_accept = yes
+    ai_frequency = 0
+
+    # --- 一、基础可用性（不限制政体类型） ---
+    is_available = { always = yes }
+
+    # --- 二、交互是否显示 ---
+    is_shown = {
+        NOT = { scope:actor = scope:recipient }
+        scope:recipient = {
+            is_vassal_or_below_of = scope:actor
+        }
+        scope:actor = {
+            is_ai = no
+        }
+    }
+
+    # --- 三、有效性（无条件放行） ---
+    is_valid_showing_failures_only = {
+        always = yes
+    }
+
+    # --- 四、执行：填充头衔列表 + 打开窗口 ---
+    on_accept = {
+        # V5.3：每次开窗先清除旧选中标记、旧列表与显示状态。
+        scope:actor = {
+            # V5.3：恢复头衔标记后，必须先清除旧列表成员上的选中标记。
+            every_in_list = { variable = tmm_vassal_titles remove_variable = tmm_v5_fv }
+            every_in_list = { variable = tmm_player_titles remove_variable = tmm_v5_fp }
+            clear_variable_list = tmm_vassal_titles
+            clear_variable_list = tmm_player_titles
+            clear_variable_list = tmm_vassal_regiments
+            clear_variable_list = tmm_player_regiments
+            remove_variable = tmm_has_vassal_title
+            remove_variable = tmm_has_player_title
+            remove_variable = tmm_v5_vassal_title
+            remove_variable = tmm_v5_player_title
+            remove_variable = tmm_v5_vassal_name
+            remove_variable = tmm_v5_player_name
+        }
+
+        # 1. 玩家头衔（显式捕获 title，避免自引用 scope:actor 跳转）
+        scope:actor = {
+            every_held_title = {
+                save_temporary_scope_as = _t
+                scope:actor = {
+                    add_to_variable_list = { name = tmm_player_titles target = scope:_t }
+                }
+            }
+        }
+
+        # 2. 封臣头衔
+        scope:recipient = {
+            save_scope_as = tmm_vassal
+            every_held_title = {
+                scope:actor = {
+                    add_to_variable_list = { name = tmm_vassal_titles target = prev }
+                }
+            }
+        }
+
+        # 3. 打开窗口并默认选中两侧第一个头衔
+        scope:actor = {
+            set_variable = { name = tmm_maa_window_open value = flag:yes }
+            tmm_v5_default_select_titles = yes
+        }
+    }
+}

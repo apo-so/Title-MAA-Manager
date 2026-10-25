@@ -1,0 +1,67 @@
+# ===================================================
+# 功能：批量收回头衔兵士宏（用于兵权悉归 / 收天下兵）
+# 说明：将角色持有的所有头衔上的头衔兵士收回至指定接收者主头衔
+# ===================================================
+
+# --- 收回单支头衔兵士至接收者 ---
+# 方向：scope:old_regiment → scope:tmm_maa_receiver.primary_title
+# 需要提前保存：
+# scope:old_regiment = 要收回的旧头衔兵士
+# scope:tmm_maa_receiver = 收回兵权者，一般是玩家/root/actor
+tmm_revoke_maa_to_receiver = {
+	hidden_effect = {
+
+		# 1. 在收回者主头衔创建一支临时规模为 200 的头衔兵士
+		create_maa_regiment = {
+			type_of = scope:old_regiment
+			check_can_recruit = no
+			title = scope:tmm_maa_receiver.primary_title
+			size = 200
+		}
+
+		# 2. 找到刚刚创建的那支主头衔兵士
+		scope:tmm_maa_receiver.primary_title = {
+			random_title_maa_regiment = {
+				limit = {
+					maa_size = 200
+					is_title_maa_regiment = yes
+				}
+
+				# 3. 把规模改成旧兵团规模
+				change_maa_regiment_size = scope:old_regiment.maa_size
+				change_maa_regiment_size = -200
+
+				# 4. 同步当前兵员数量
+				change_maa_troops_count = {
+					value = scope:old_regiment.maa_current_troops_count
+					subtract = maa_current_troops_count
+				}
+			}
+		}
+
+		# 5. 销毁旧兵团
+		scope:old_regiment = {
+			destroy_maa_regiment = yes
+		}
+	}
+}
+
+# --- 收回当前角色持有的所有头衔上的头衔兵士 ---
+# 当前 scope = character
+# 需要提前保存：
+# scope:tmm_maa_receiver = 收回者
+tmm_revoke_all_maa_from_character = {
+	every_held_title = {
+		every_owned_title_maa_regiment = {
+			limit = {
+				is_title_maa_regiment = yes
+			}
+
+			save_temporary_scope_as = old_regiment
+
+			scope:tmm_maa_receiver = {
+				tmm_revoke_maa_to_receiver = yes
+			}
+		}
+	}
+}

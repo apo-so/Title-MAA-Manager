@@ -1,0 +1,66 @@
+# ===================================================
+# 功能：个人头衔兵士互转 V7（on_accept 直接填充，不经过 SGUI init）
+# 说明：玩家对自己使用 → on_accept 直接填充列表和设置 flag
+#       采用 find_concubine 自指模式，scope:actor = scope:recipient
+#       on_accept 模仿 V5（14tmm）风格，直接操作变量列表
+# ===================================================
+tmm_personal_title_maa_interaction = {
+    category = interaction_category_diplomacy
+    icon = request_maa_interaction
+    common_interaction = yes
+    desc = tmm_personal_title_maa_interaction_desc
+    auto_accept = yes
+
+    # --- 一、基础可用性（不限制政体类型） ---
+    is_available = { always = yes }
+
+    # --- 二、自指模式：玩家对自己使用 ---
+    is_shown = {
+        scope:actor = scope:recipient
+        scope:actor = {
+            is_ai = no
+        }
+    }
+
+    # --- 三、有效性（无条件放行） ---
+    is_valid_showing_failures_only = {
+        always = yes
+    }
+
+    # --- 四、执行：直接填充列表 + 打开窗口（不经过 SGUI） ---
+    on_accept = {
+        # 1. 个人兵士列表（is_title_maa_regiment = no → 非头衔绑定兵团）
+        scope:actor = {
+            every_maa_regiment = {
+                limit = { is_title_maa_regiment = no }
+                save_temporary_scope_as = _r
+                scope:actor = {
+                    add_to_variable_list = { name = tmm_pt_personal_list target = scope:_r }
+                }
+            }
+        }
+
+        # 2. has_personal flag（有个人兵团才设）
+        scope:actor = {
+            if = {
+                limit = { any_maa_regiment = { is_title_maa_regiment = no } }
+                set_variable = { name = tmm_pt_has_personal value = flag:yes }
+            }
+        }
+
+        # 3. 头衔列表（所有持有的头衔）
+        scope:actor = {
+            every_held_title = {
+                save_temporary_scope_as = _t
+                scope:actor = {
+                    add_to_variable_list = { name = tmm_pt_title_list target = scope:_t }
+                }
+            }
+        }
+
+        # 4. 打开窗口
+        scope:actor = {
+            set_variable = { name = tmm_pt_window_open value = flag:yes }
+        }
+    }
+}

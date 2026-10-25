@@ -1,0 +1,90 @@
+# ===================================================
+# 功能：下级移隶 — 将下属总督持有的头衔兵移交给指定总督
+# 说明：触发事件让玩家选择要移隶的下级总督层级
+# ===================================================
+tmm_subordinate_reassign_interaction = {
+    category = interaction_category_diplomacy
+    common_interaction = no
+    interface_priority = 1000
+    icon = diplomacy
+
+    desc = tmm_subordinate_reassign_interaction_desc
+
+    filter_tags = { admin_governor }
+
+    popup_on_receive = no
+    pause_on_receive = no
+    auto_accept = yes
+
+    is_shown = {
+        scope:actor = {
+            is_ai = no
+        }
+
+        scope:recipient = {
+            #is_landed = yes
+            is_vassal_or_below_of = scope:actor
+
+            OR = {
+                vassal_contract_has_flag = celestial_military_appointment
+                vassal_contract_has_flag = meritocratic_military_appointment
+                has_character_flag = celestial_military_appointment
+            }
+        }
+    }
+
+    is_valid_showing_failures_only = {
+        custom_tooltip = {
+            text = tmm_subordinate_reassign_no_sub_governor_maa_desc
+
+            scope:recipient = {
+                any_vassal_or_below = {
+                    highest_held_title_tier >= tier_barony
+
+                    any_held_title = {
+                        any_owned_title_maa_regiment = {
+                            count >= 1
+                            is_personal_maa_regiment = no
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    is_highlighted = {
+        scope:recipient = {
+            any_vassal_or_below = {
+                highest_held_title_tier >= tier_barony
+
+                any_held_title = {
+                    any_owned_title_maa_regiment = {
+                        count >= 1
+                        is_personal_maa_regiment = no
+                    }
+                }
+            }
+        }
+    }
+
+    on_accept = {
+        scope:recipient = {
+            save_scope_as = tmm_subordinate_reassign_target
+        }
+
+        scope:actor = {
+            trigger_event = {
+                id = tmm_subordinate_reassign.0001
+                days = 0
+            }
+        }
+    }
+
+    ai_potential = {
+        always = no
+    }
+
+    ai_will_do = {
+        base = 0
+    }
+}

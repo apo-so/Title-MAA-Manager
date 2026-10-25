@@ -1,0 +1,63 @@
+# ===================================================
+# 功能：转移头衔兵士 V5 — 自己版（天下兵马）
+# 说明：右键自己 → 打开窗口 → 选头衔 → 点兵团转移
+# ===================================================
+tmm_select_title_maa_self_interaction = {
+    category = interaction_category_diplomacy
+    interface_priority = 121
+    common_interaction = yes
+    icon = request_maa_interaction
+    desc = tmm_select_title_maa_self_interaction_desc
+    auto_accept = yes
+
+    # --- 一、显示条件（参照驻防地方） ---
+    is_shown = {
+        scope:actor = scope:recipient
+        scope:actor = {
+            is_ai = no
+        }
+    }
+
+    # --- 二、执行（两侧均填充玩家自己的头衔） ---
+    on_accept = {
+        # V5.3：每次开窗先清除旧选中标记、旧列表与显示状态。
+        scope:actor = {
+            # V5.3：恢复头衔标记后，必须先清除旧列表成员上的选中标记。
+            every_in_list = { variable = tmm_vassal_titles remove_variable = tmm_v5_fv }
+            every_in_list = { variable = tmm_player_titles remove_variable = tmm_v5_fp }
+            clear_variable_list = tmm_vassal_titles
+            clear_variable_list = tmm_player_titles
+            clear_variable_list = tmm_vassal_regiments
+            clear_variable_list = tmm_player_regiments
+            remove_variable = tmm_has_vassal_title
+            remove_variable = tmm_has_player_title
+            remove_variable = tmm_v5_vassal_title
+            remove_variable = tmm_v5_player_title
+            remove_variable = tmm_v5_vassal_name
+            remove_variable = tmm_v5_player_name
+        }
+
+        scope:actor = {
+            every_held_title = {
+                save_temporary_scope_as = _t
+                scope:actor = {
+                    add_to_variable_list = { name = tmm_player_titles target = scope:_t }
+                }
+            }
+        }
+        scope:actor = {
+            save_scope_as = tmm_vassal
+            every_held_title = {
+                save_temporary_scope_as = _tv
+                scope:actor = {
+                    add_to_variable_list = { name = tmm_vassal_titles target = scope:_tv }
+                }
+            }
+        }
+        scope:actor = {
+            set_variable = { name = tmm_maa_window_open value = flag:yes }
+            # V5.4：两侧默认选中各自列表的第一个头衔
+            tmm_v5_default_select_titles = yes
+        }
+    }
+}
