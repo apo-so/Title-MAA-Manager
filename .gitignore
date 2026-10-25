@@ -1,0 +1,63 @@
+# CK3 Mod 项目：忽略本地文件、历史备份和测试产物
+# .gitignore 不是隐私检查工具；公开提交前必须人工审核。
+
+# 系统 / 编辑器 / 临时文件
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.orig
+*.old
+*.log
+
+# 私有配置与凭据
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+
+# 本地游戏存档、调试输出
+*.ck3
+*.sav
+*.sqlite
+*.sqlite3
+*.db
+*.dmp
+crashes/
+logs/
+saves/
+screenshots/
+cache/
+
+# 归档、旧版源码和操作回执：默认不进入公共代码仓库
+*.zip
+*.7z
+*.rar
+backups/
+backup/
+_backup_stale_duplicates/
+history/
+runs/
+deployments/
+staging/
+tmp/
+
+# 大型测试视频
+*.mp4
+*.mov
+*.avi
+*.webm
+
+# 注意：*.txt / *.gui / *.yml / *.mod / 图片等可能是 Mod 必需资源，
+# 故不得用通配符全局排除这些文件。
