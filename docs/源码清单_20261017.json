@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "project": "Title-MAA-Manager",
+  "source_snapshot": "2026.10.17.01-restore",
+  "source_identity": "local_install_snapshot_not_steam_verified",
+  "status": "under_review_not_releasable",
+  "files": [
+    {
+      "path": "common/scripted_guis/01tmm_GUI触发_guis.txt",
+      "bytes": 36594,
+      "sha256": "cfbd625af4474378f36dc7ce14cda624659a7d13b09c0d5005b23054b5599087",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "gui/scripted_widgets/01tmm_scripted_windows.txt",
+      "bytes": 221,
+      "sha256": "aadfa0b0ea8b836b5a9e336959381ec2c62fac345bd67f8a2bbd43924bf33238",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "gui/01tmm_select_maa_window.gui",
+      "bytes": 9979,
+      "sha256": "a821c94c3647058d036f2539ea248f68866e184074aedb10ab359f0270da9064",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "events/01tmm_下级移隶_events.txt",
+      "bytes": 5425,
+      "sha256": "78a0e192de823b6914908a7179382191270b81e1fe38bcd184d1ba5988aa5bc8",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/decisions/01tmm_收天下兵_decisions.txt",
+      "bytes": 1051,
+      "sha256": "401596f78a71c019e5ca55ff2216544c7b5dd9bcc7c3de2b5c7b1eed1f2da922",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/01tmm_赐予兵权_interaction.txt",
+      "bytes": 10911,
+      "sha256": "98e4e7cb7a2ca1ae5a921d0cec4af82a130020c57a3d25bc7fd430d16a72860b",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_effects/01tmm_转移宏_effects.txt",
+      "bytes": 5322,
+      "sha256": "c084c81c211ba782c1f0779961e8096d0f1fb042187eed97e07aa9c685c46854",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "localization/simp_chinese/01tmm_龙文本_l_simp_chinese.yml",
+      "bytes": 1421,
+      "sha256": "82177c607657b50b561723436c03e61ad88a3a3dda515895a9e3f95bfe98ee5c",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "gui/02tmm_personal_maa_window.gui",
+      "bytes": 16406,
+      "sha256": "df9f88e0ae7a9e91dc9603650a96d3f558b5723c93d51ab25e6a12d58f7377dd",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "events/02tmm_头衔选兵_events.txt",
+      "bytes": 8813,
+      "sha256": "5981ea637692166cf7f643388ecb8874a52353b8c7b76b16445ba55921f4bba8",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/02tmm_收回兵权_interaction.txt",
+      "bytes": 12266,
+      "sha256": "7443406549b708b797e1115f4365b630d24fa38495846df13e55b14e3fce38d7",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "localization/simp_chinese/02tmm_核心文本_l_simp_chinese.yml",
+      "bytes": 10750,
+      "sha256": "76880b1128de5e1b8bc0d56fb45038bd8f579e19a630da0c6d1b42656687144d",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_effects/02tmm_私有化宏_effect.txt",
+      "bytes": 839,
+      "sha256": "3e91bbc60438fff68f2222427a130eaa9e596b244c0dd97ca0fdfbe07219e6f6",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_effects/03tmm_收回宏_effects.txt",
+      "bytes": 1854,
+      "sha256": "2929db94d42ad52f22c08337af16f887daa5f5bedeb2e0e4f8f6de9a82429050",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/03tmm_集结地方_interaction.txt",
+      "bytes": 12107,
+      "sha256": "9961415cce1cc09af04f1d84f1dec8fbc093f94d8afaaba98eb101e65f42addb",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_effects/04tmm_v5_window_refresh_effects.txt",
+      "bytes": 4336,
+      "sha256": "94a5d3b28fc566f87a309de43952e23fce2bab0fce10ad879c8071f17b553ecf",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/04tmm_驻防地方_interaction.txt",
+      "bytes": 10795,
+      "sha256": "052f4b12226cad496c6b9e91d291c935d65e72fed8ca94db9dd059e0c1467e6c",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/05tmm_裁撤冗兵_interaction.txt",
+      "bytes": 10416,
+      "sha256": "b50ea306f678b8082767376480481a2e5d3bf4110bce98864ebc74d367ca2a35",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/06tmm_阅兵仪式_interaction.txt",
+      "bytes": 1983,
+      "sha256": "d12383baa921d21e06d9b30d6d321f33ee25096cd6b770d7b413c555ca612846",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/07tmm_借兵_interaction.txt",
+      "bytes": 1458,
+      "sha256": "b3cc86d75508636ef94e7616dacdfcbbb96d6b7f0d2138099c080ffcdfe424ca",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/08tmm_军队私有化_interaction.txt",
+      "bytes": 1097,
+      "sha256": "b2c7e43ad3cb626de9151a87f7d1010583176e1a4ac33581967b9aa9cc740f23",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/09tmm_吃皇粮_interaction.txt",
+      "bytes": 1521,
+      "sha256": "baa4b2384e34099db59a4270ffe87ec2c12f381a1402f4a4e3594e24984424b7",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/10tmm_下级移隶_interaction.txt",
+      "bytes": 2362,
+      "sha256": "fabf6b465478c3beebb905a173c7adc6243b618da570a45f7947ee8ead5cce5c",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/11tmm_兵权悉归_interaction.txt",
+      "bytes": 1603,
+      "sha256": "89e99404536760c71ce374136c67a225bf06143da83ffb63dd66ff184843c7bc",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/12tmm_指派兵权_interaction.txt",
+      "bytes": 1791,
+      "sha256": "7d5ac8b75e08875fdf24d4de2353bebd6f9a45101bf99422f029b7d50a984e81",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/13tmm_收集封臣兵权_interaction.txt",
+      "bytes": 1839,
+      "sha256": "1c180854728d5c31b9d9e38d7cb4dc42241bf5926ed34ea19251193a163d1980",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/14tmm_转移头衔兵士_interaction.txt",
+      "bytes": 2941,
+      "sha256": "1eead98a4b5ddd8396e3e52dc51726eb3685a9cdc28a9c2497f4f09b7192e55d",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/15tmm_转移头衔兵士_自己_interaction.txt",
+      "bytes": 2484,
+      "sha256": "0c13c9be1a49e4a2e7b3245bab0e0197e037b4074970f9ed5ad6fd7d0bdd4800",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/15tmm_个人头衔兵士互转_interaction.txt",
+      "bytes": 2304,
+      "sha256": "426be5a4f2370067e057d8b9ad1ba4feec9f3072dec2cce30f54f6e5e30882af",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "localization/simp_chinese/tmm_compat_l_simp_chinese.yml",
+      "bytes": 1054,
+      "sha256": "c598b1bb4f806b4f2e22a77e2a6f7e348e9d3efc198d836f055cd47e2f136e54",
+      "bom": true,
+      "crlf": 9
+    },
+    {
+      "path": "common/scripted_effects/tmm_recruit_effects.txt",
+      "bytes": 2666,
+      "sha256": "363081a82974446d49d405de111ef6196c05d995cf81271d7d2abf5c230b6b2a",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_guis/tmm_recruit_guis.txt",
+      "bytes": 4017,
+      "sha256": "9d1cdd9e137f89d4549e146e889eedf73a18d1644f280f298ab55718e319eef3",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "descriptor.mod",
+      "bytes": 171,
+      "sha256": "503cd4c5598808b138742da998f14c27b3cd3d19d09ab27b0d4d795f80a62cc8",
+      "bom": false,
+      "crlf": 0
+    }
+  ],
+  "known_exclusions": [
+    "gui/window_military.gui",
+    "gui/window_menatarms_type_view.gui"
+  ],
+  "validation_note": "File hashes only; engine behavior, licensing, Steam payload, and runtime tests are separate."
+}
