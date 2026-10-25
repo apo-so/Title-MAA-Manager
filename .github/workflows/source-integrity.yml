@@ -2,8 +2,6 @@ name: CK3 源码快照字节校验
 on:
   pull_request:
     branches: [main]
-  push:
-    branches: ["import/**"]
   workflow_dispatch:
 
 jobs:
