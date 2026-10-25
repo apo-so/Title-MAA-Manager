@@ -1,0 +1,339 @@
+######################################################
+# TMM PT — 个人头衔兵士互转 双面板窗口
+# 左侧：个人私兵 → 转入选中头衔
+# 右侧：选中头衔的兵团 → 转为私兵
+# 大小：960×720
+######################################################
+
+window = {
+    name = "tmm_personal_title_maa_window"
+    widgetid = "tmm_personal_title_maa_window"
+    datacontext = "[GetPlayer]"
+    datacontext = "[GetVariableSystem]"
+    parentanchor = center
+    size = { 960 720 }
+    layer = windows_layer
+    movable = yes
+    using = Window_Background
+    using = Window_Decoration
+    visible = "[GetPlayer.MakeScope.Var('tmm_pt_window_open').IsSet]"
+
+    state = { name = _show using = Animation_FadeIn_Quick using = Sound_WindowShow_Standard on_start = "[PdxGuiWidget.StackTop]" }
+    state = { name = _hide using = Animation_FadeOut_Quick using = Sound_WindowHide_Standard }
+
+    vbox = {
+        using = Window_Margins
+        set_parent_size_to_minimum = yes
+
+        # header
+        header_pattern = {
+            layoutpolicy_horizontal = expanding
+            blockoverride "header_text" { text = "tmm_pt_window_title" }
+            blockoverride "button_close" {
+                onclick = "[GetScriptedGui('tmm_pt_close_window').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).End)]"
+            }
+        }
+
+        # main dual-panel
+        hbox = {
+            layoutpolicy_vertical = expanding
+            spacing = 10
+
+            # ===== LEFT: 个人私兵 =====
+            vbox = {
+                minimumsize = { 420 -1 }
+                maximumsize = { 420 -1 }
+                layoutpolicy_vertical = expanding
+                margin = { 5 5 }
+
+                # header + hint
+                vbox = {
+                    spacing = 0
+                    margin_bottom = 4
+                    text_single = {
+                        text = "tmm_pt_personal_header"
+                        using = Font_Size_Medium
+                    }
+                    text_single = {
+                        text = "tmm_pt_left_hint"
+                        using = Font_Size_Small
+                        default_format = "#weak"
+                    }
+                }
+
+                # personal MAA gridbox
+                scrollbox = {
+                    size = { 420 620 }
+                    minimumsize = { 420 620 }
+                    layoutpolicy_horizontal = fixed
+                    scrollbarpolicy_horizontal = always_off
+
+                    blockoverride "scrollbox_content" {
+                        hbox = {
+                            layoutpolicy_horizontal = expanding
+                            parentanchor = top|left
+                            fixedgridbox = {
+                                datamodel = "[GetPlayer.MakeScope.GetList('tmm_pt_personal_list')]"
+                                flipdirection = yes
+                                datamodel_wrap = 3
+                                addcolumn = 135
+                                addrow = 105
+                                item = {
+                                    container = {
+                                        datacontext = "[Scope.Regiment]"
+                                        using = tooltip_es
+                                        background = {
+                                            texture = "[Regiment.GetMAAType.GetHorizontalImage]"
+                                            alpha = 0.5
+                                            fittype = centercrop
+                                            margin = { -2 -2 }
+                                        }
+                                        background = {
+                                            texture = "gfx/interface/component_tiles/tile_vignette_3px.dds"
+                                            spriteType = Corneredtiled
+                                            spriteborder = { 5 5 }
+                                            margin = { -2 -2 }
+                                        }
+                                        button_standard_clean = {
+                                            size = { 115 90 }
+                                            onclick = "[GetScriptedGui('tmm_pt_transfer_to_title').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('regiment',Regiment.MakeScope).End)]"
+                                            vbox = {
+                                                expand = {}
+                                                margin = { 4 2 }
+                                                hbox = { layoutpolicy_horizontal = expanding spacing = 3 background = { using = Background_Area_Dark }
+                                                    icon = { texture = "[Regiment.GetMAAType.GetIcon]" size = { 16 16 } }
+                                                    text_single = { text = "[Regiment.GetName]" using = Font_Size_Small max_width = 75 }
+                                                }
+                                                text_single = {
+                                                    text = "MAA_CURRENT_SIZE"
+                                                    default_format = "#high"
+                                                    using = Font_Size_Small
+                                                }
+                                            }
+                                        }
+                                        tooltipwidget = {
+                                            using = regiment_container_text_tooltip
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                # empty hint
+                text_multi = {
+                    text = "tmm_pt_no_personal"
+                    using = Font_Size_Small
+                    default_format = "#weak"
+                    margin = { 15 15 }
+                    visible = "[Not(GetPlayer.MakeScope.Var('tmm_pt_has_personal').IsSet)]"
+                }
+            }
+
+            # ===== RIGHT: 头衔兵士 =====
+            vbox = {
+                minimumsize = { 420 -1 }
+                maximumsize = { 420 -1 }
+                layoutpolicy_vertical = expanding
+                margin = { 5 5 }
+
+                # header + hint
+                vbox = {
+                    spacing = 0
+                    margin_bottom = 4
+                    text_single = {
+                        text = "tmm_pt_title_header"
+                        using = Font_Size_Medium
+                    }
+                    text_single = {
+                        text = "tmm_pt_right_hint"
+                        using = Font_Size_Small
+                        default_format = "#weak"
+                    }
+                }
+
+                # 选中头衔框
+                hbox = {
+                    layoutpolicy_horizontal = expanding
+                    minimumsize = { -1 28 }
+                    margin_bottom = 4
+                    background = { using = Background_Area }
+                    widget = {
+                        size = { 22 22 }
+                        coa_title_tiny_crown = { parentanchor = center }
+                        datacontext = "[GetPlayer.MakeScope.Var('tmm_pt_selected_title').Title]"
+                    }
+                    text_single = {
+                        text = "[GetPlayer.MakeScope.Var('tmm_pt_selected_title').Title.GetName]"
+                        using = Font_Size_Medium
+                        default_format = "#high"
+                        layoutpolicy_horizontal = expanding
+                    }
+                }
+
+                # 头衔列表小标题
+                text_single = {
+                    text = "tmm_pt_title_list_label"
+                    using = Font_Size_Small
+                    default_format = "#weak"
+                    margin_bottom = 2
+                }
+
+                # 头衔列表
+                scrollbox = {
+                    size = { 420 120 }
+                    minimumsize = { 420 120 }
+                    layoutpolicy_horizontal = fixed
+
+                    blockoverride "scrollbox_content" {
+                        vbox = {
+                            layoutpolicy_horizontal = expanding
+                            datamodel = "[GetPlayer.MakeScope.GetList('tmm_pt_title_list')]"
+
+                            item = {
+                                button_standard = {
+                                    datacontext = "[Scope.Title]"
+                                    size = { 410 36 }
+                                    hbox = {
+                                        layoutpolicy_horizontal = expanding
+                                        coa_title_tiny_crown = {}
+                                        text_single = {
+                                            text = "[Title.GetName]"
+                                            using = Font_Size_Small
+                                            layoutpolicy_horizontal = expanding
+                                        }
+                                    }
+                                    onclick = "[GetScriptedGui('tmm_pt_select_title').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('title',Scope.Title.MakeScope).End)]"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                # 省份扩展小标题
+                text_single = {
+                    text = "tmm_pt_province_label"
+                    using = Font_Size_Small
+                    default_format = "#weak"
+                    margin_top = 8
+                    margin_bottom = 2
+                }
+
+                # 省份扩展：全头衔兵士
+                scrollbox = {
+                    size = { 420 330 }
+                    minimumsize = { 420 330 }
+                    layoutpolicy_horizontal = fixed
+
+                    blockoverride "scrollbox_content" {
+                        vbox = {
+                            layoutpolicy_horizontal = expanding
+                            datamodel = "[GetPlayer.GetTitles]"
+                            spacing = 16
+                            ignoreinvisible = no
+
+                            item = {
+                                vbox = {
+                                    datacontext = "[Title]"
+                                    layoutpolicy_horizontal = expanding
+                                    spacing = 4
+
+                                    # 头衔标题
+                                    hbox = {
+                                        layoutpolicy_horizontal = expanding
+                                        spacing = 5
+                                        margin = { 0 2 }
+                                        background = { using = Background_Area }
+                                        widget = {
+                                            size = { 28 28 }
+                                            coa_title_tiny_crown = { parentanchor = center }
+                                        }
+                                        text_single = {
+                                            layoutpolicy_horizontal = expanding
+                                            text = "[Title.GetName]"
+                                            using = Font_Size_Medium
+                                            max_width = 220
+                                        }
+                                        text_single = {
+                                            text = "[Title.GetTotalTitleMAATroopsDesc]"
+                                            default_format = "#high"
+                                            using = Font_Size_Small
+                                        }
+                                    }
+
+                                    # 无兵士
+                                    text_single = {
+                                        visible = "[IsDataModelEmpty( Title.GetControlledMAA )]"
+                                        margin = { 5 5 }
+                                        text = "MV_NO_MAA_FOR_TITLE"
+                                        default_format = "#weak"
+                                        align = center
+                                    }
+
+                                    # 兵团卡片
+                                    fixedgridbox = {
+                                        layoutpolicy_horizontal = expanding
+                                        datamodel = "[Title.GetControlledMAA]"
+                                        flipdirection = yes
+                                        datamodel_wrap = 3
+                                        addcolumn = 135
+                                        addrow = 105
+
+                                        item = {
+                                            container = {
+                                                datacontext = "[Regiment]"
+                                                using = tooltip_es
+                                                background = {
+                                                    texture = "[Regiment.GetMAAType.GetHorizontalImage]"
+                                                    alpha = 0.5
+                                                    fittype = centercrop
+                                                    margin = { -2 -2 }
+                                                }
+                                                background = {
+                                                    texture = "gfx/interface/component_tiles/tile_vignette_3px.dds"
+                                                    spriteType = Corneredtiled
+                                                    spriteborder = { 5 5 }
+                                                    margin = { -2 -2 }
+                                                }
+                                                button_standard_clean = {
+                                                    size = { 115 90 }
+                                                    onclick = "[GetScriptedGui('tmm_pt_transfer_to_personal').Execute(GuiScope.SetRoot(GetPlayer.MakeScope).AddScope('regiment',Regiment.MakeScope).End)]"
+                                                    vbox = {
+                                                        expand = {}
+                                                        margin = { 4 2 }
+                                                        hbox = { layoutpolicy_horizontal = expanding spacing = 3 background = { using = Background_Area_Dark }
+                                                            icon = { texture = "[Regiment.GetMAAType.GetIcon]" size = { 16 16 } }
+                                                            text_single = { text = "[Regiment.GetName]" using = Font_Size_Small max_width = 75 }
+                                                        }
+                                                        text_single = {
+                                                            text = "MAA_CURRENT_SIZE"
+                                                            default_format = "#high"
+                                                            using = Font_Size_Small
+                                                        }
+                                                    }
+                                                }
+                                                tooltipwidget = {
+                                                    using = regiment_container_text_tooltip
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                # 无头衔提示
+                text_multi = {
+                    text = "tmm_pt_no_regiments"
+                    using = Font_Size_Small
+                    default_format = "#weak"
+                    margin = { 15 15 }
+                    visible = "[Not(DataModelHasItems( GetPlayer.GetTitles ))]"
+                }
+            }
+        }
+    }
+}

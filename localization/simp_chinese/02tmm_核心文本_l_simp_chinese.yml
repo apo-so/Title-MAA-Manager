@@ -1,0 +1,173 @@
+﻿l_simp_chinese:
+ # ===================================================
+ # 功能：核心文本 — 天下兵马（TMM）系统全部交互与决策的本地化文本
+ # 说明：包含赐予/收回/集结/驻防/裁撤/阅兵/借兵/私有化/吃皇粮/下级移隶/兵权悉归等功能的界面文本
+ # ===================================================
+
+ # --- 一、核心互动功能基础文本 ---
+ # 功能一：赐予兵权（给封臣）
+ tmm_deploy_to_vassal_interaction:0 "赐予兵权（天下兵马）"
+ tmm_deploy_to_vassal_interaction_desc:0 "将自己主头衔的头衔兵士转移到指定封臣头衔"
+
+ # 功能二：收回兵权（对封臣）
+ tmm_revoke_from_vassal_interaction:0 "收回兵权（天下兵马）"
+ tmm_revoke_from_vassal_interaction_desc:0 "将指定封臣头衔的头衔兵士转移到自己的主头衔下"
+
+ # 功能三：集结地方军（自身：地方 → 首都）
+ tmm_rally_local_interaction:0 "集结地方军（天下兵马）"
+ tmm_rally_local_interaction_desc:0 "将次级头衔的头衔兵士指派到自己的主头衔"
+
+ # 功能四：驻防地方（自身：首都 → 地方）
+ tmm_garrison_local_interaction:0 "驻防地方（天下兵马）"
+ tmm_garrison_local_interaction_desc:0 "将主头衔的头衔兵士指派到自己的次级头衔"
+
+ # 额外补充：裁撤冗兵逻辑
+ tmm_disband_vassal_interaction:0 "裁撤冗兵（天下兵马）"
+ tmm_disband_vassal_interaction_desc:0 "删除指定封臣头衔上的头衔兵士"
+
+ # --- 二、兵种与选项大类通用文本 ---
+ all_title_maa:0 "全部军团"
+ other_type:0 "其他类型"
+
+ # --- 三、功能五：查看军团明细（阅兵仪式） ---
+ tmm_inspect_maa_interaction:0 "阅兵仪式（天下兵马）"
+ tmm_inspect_maa_interaction_desc:0 "从 [recipient.GetShortUIName] 的头衔列表中**指定一个头衔**，将其麾下的常备军控制权划归到您的主头衔名下。当然，主要用来检查有哪些兵。"
+ 
+ # 列表选择时的提示
+ tmm_inspect_maa_interaction_target_failure:0 "该头衔下没有常备军，无法移交。"
+
+ # 结果通知
+ CONSOLIDATE_MAA_DONE_TITLE:0 "移交完成"
+ CONSOLIDATE_MAA_DONE_DESC:0 "已将 [target.GetName] 的所有武装力量成功移交至您的麾下。"
+
+ # --- 四、功能六：借兵互动系统 ---
+ tmm_lend_maa_interaction:0 "借兵（天下兵马）"
+ tmm_lend_maa_interaction_desc:0 "从您的头衔列表中选定一个头衔，将其麾下常备军的**实际控制权**暂时移交给 [recipient.GetShortUIName]。"
+ 
+ # 列表选择时的提示
+ tmm_lend_maa_interaction_target_failure:0 "您选定的这个头衔下没有常备军。"
+
+ # 结果通知
+ LEND_MAA_DONE_TITLE:0 "指挥权已移交"
+ LEND_MAA_DONE_DESC:0 "已将 [target.GetName] 的所有武装力量交由 [recipient.GetShortUIName] 指挥。"
+
+ # --- 五、军队私有化 ---
+tmm_privatize_interaction:0 "军队私有化（天下兵马）"
+tmm_privatize_interaction_desc:0 "将帝国的国家/头衔常备军（Maa）重新整编为只效忠于您个人及家族的私兵。此举将把国家武力彻底转化为您的私人财产。"
+
+ # --- 六、收天下兵决策 ---
+ tmm_revoke_all_vassals_decision: "收天下兵（天下兵马）"
+ tmm_revoke_all_vassals_decision_desc: "收回你所有封臣及其下级封臣持有头衔上的头衔兵士，并将其集中到你的主头衔。"
+ tmm_revoke_all_vassals_decision_tooltip: "所有下属封臣的头衔兵士都会被收回"
+ tmm_revoke_all_vassals_decision_confirm: "收回头衔兵士"
+
+ # --- 七、兵权悉归交互 ---
+ tmm_revoke_vassal_tree_interaction: "兵权悉归（天下兵马）"
+ tmm_revoke_vassal_tree_interaction_desc: "收回[recipient.GetShortUIName]及其所有下级封臣持有头衔上的头衔兵士，并将其集中到你的主头衔。"
+ tmm_revoke_vassal_tree_interaction_notification: "已收回头衔兵士"
+ tmm_revoke_vassal_tree_interaction_notification_tooltip: "[recipient.GetShortUIName]及其下级封臣的头衔兵士已被收回。"
+
+ # --- 八、下级移隶交互与事件 ---
+ tmm_subordinate_reassign_interaction: "下级移隶（天下兵马）"
+ tmm_subordinate_reassign_interaction_desc: "将该总督的下属总督持有的头衔兵移交给选中总督。"
+
+ tmm_subordinate_reassign_no_sub_governor_maa_desc: "该总督必须拥有可移交的下属总督头衔兵。"
+
+ tmm_subordinate_reassign.0001.t: "下级移隶"
+ tmm_subordinate_reassign.0001.desc: "你可以将该总督的下属总督持有的头衔兵移交给选中总督。"
+
+ tmm_subordinate_reassign.0001.kingdom: "王国级下属总督移隶"
+ tmm_subordinate_reassign.0001.duchy: "公国级下属总督移隶"
+ tmm_subordinate_reassign.0001.county: "伯爵级下属总督移隶"
+ tmm_subordinate_reassign.0001.barony: "男爵级下属总督移隶"
+ tmm_subordinate_reassign.0001.all_governors: "所有下属总督移隶"
+ tmm_subordinate_reassign.0001.cancel: "取消"
+
+ tmm_subordinate_reassign_kingdom_tt: "王国级下属总督的所有头衔兵将移交给该总督。"
+ tmm_subordinate_reassign_duchy_tt: "公国级下属总督的所有头衔兵将移交给该总督。"
+ tmm_subordinate_reassign_county_tt: "伯爵级下属总督的所有头衔兵将移交给该总督。"
+ tmm_subordinate_reassign_barony_tt: "男爵级下属总督的所有头衔兵将移交给该总督。"
+ tmm_subordinate_reassign_all_governors_tt: "所有低于该总督最高头衔等级的下属总督的头衔兵将移交给该总督，不限武职。"
+
+ # --- 九、指派兵权（简化版：men_at_arms 目标类型） ---
+ tmm_deploy_maa_to_vassal_interaction:0 "精准指派兵权（天下兵马）"
+ tmm_deploy_maa_to_vassal_interaction_desc:0 "从自己的头衔兵池中选择一支兵团，指派到目标封臣的主头衔下。"
+
+ # --- 十、收集封臣兵权（精准版：men_at_arms 目标类型） ---
+tmm_collect_maa_from_vassal_interaction:0 "精准收回封臣兵权（天下兵马）"
+tmm_collect_maa_from_vassal_interaction_desc:0 "从目标封臣的头衔兵池中精准选定一支兵团，收回至自己的主头衔下。"
+
+ # --- 十一、转移头衔兵士 V5（天下兵马） ---
+ tmm_select_title_maa_interaction:0 "转移头衔兵士（天下兵马）"
+ tmm_select_title_maa_self_interaction:0 "转移头衔兵士（天下兵马）"
+ tmm_select_title_maa_self_interaction_desc:0 "将该目标所有带兵头衔列出，点击头衔查看兵团，点击兵团直接收回至你的主头衔麾下。\n关闭窗口后自动清除标记。"
+ tmm_select_title_maa_interaction_desc:0 "将该封臣所有带兵头衔列出，点击头衔查看兵团，点击兵团直接收回至你的主头衔麾下。\n关闭窗口后自动清除标记。"
+
+tmm_select_maa.0001.t:0 "择兵"
+tmm_select_maa.0001.desc:0 "从 [tmm_selected_title.GetName] 的头衔兵团中选择一支收回至你的主头衔。"
+tmm_select_maa.0001.option:0 "[selected_maa.GetName]（[selected_maa.GetCurrentTroops]/[selected_maa.GetMaxTroops]人）"
+tmm_select_maa.0001.cancel:0 "取消"
+
+ # --- 十二、头衔选兵 V4（双面板互转版） ---
+ # 窗口标题
+ tmm_select_maa_window_title:0 "转移头衔兵士（天下兵马）"
+
+ # === 窗口说明 + 批量转移 ===
+ tmm_window_instruction_v4:0 "点击兵团卡片即可转移至对方选中头衔"
+ tmm_window_batch_to_player:0 "« 全部收回"
+ tmm_window_batch_to_vassal:0 "全部派发 »"
+
+ # 封臣侧
+ tmm_window_vassal_info:0 "封臣：[GetPlayer.GetVariable('tmm_window_vassal_name').GetNameNoTooltip]"
+ tmm_window_vassal_current_title:0 "◆ [GetPlayer.GetVariable('tmm_v4_vassal_title_name').GetNameNoTooltip] · [GetListSize('tmm_vassal_maa_list')|V0]支兵团"
+
+ # 玩家侧
+ tmm_window_actor_info:0 "玩家主头衔"
+ tmm_window_actor_current_title:0 "◆ [GetPlayer.GetVariable('tmm_v4_actor_title_name').GetNameNoTooltip] · [GetListSize('tmm_actor_maa_list')|V0]支兵团"
+
+ # 通用
+ tmm_window_title_section:0 "选择头衔"
+ tmm_window_no_regiments:0 "该头衔下暂无头衔兵士。\n请在上方选择其他头衔。"
+
+ # 选中状态
+ tmm_window_selected_vassal_info:0 "已选封臣兵团：[GetPlayer.GetVariable('tmm_v4_vassal_selected_name').GetNameNoTooltip]"
+ tmm_window_selected_actor_info:0 "已选玩家兵团：[GetPlayer.GetVariable('tmm_v4_actor_selected_name').GetNameNoTooltip]"
+ tmm_window_transfer_arrow:0 "⇄"
+
+ # 按钮
+ tmm_window_revoke_btn:0 "←收回"
+ tmm_window_deploy_btn:0 "选派→"
+ tmm_window_transfer_all_vassal:0 "全部收回"
+ tmm_window_transfer_all_actor:0 "全部选派"
+
+ # === V5 双面板 ===
+ tmm_window_instruction:0 "点击头衔查看兵团，点击兵团卡片转移。建议先选玩家头衔再选封臣头衔，避免卡顿。若点击无反应，系引擎加载延迟，点右侧「清除」后重试。"
+ tmm_window_vassal_side_header:0 "封臣头衔"
+ tmm_window_player_side_header:0 "玩家头衔"
+ tmm_window_vassal_selected:0 "[GetPlayer.MakeScope.Var('tmm_v5_vassal_title').Title.GetName]"
+ tmm_window_player_selected:0 "[GetPlayer.MakeScope.Var('tmm_v5_player_title').Title.GetName]"
+ tmm_window_vassal_regiment_header:0 "封臣头衔兵士"
+ tmm_window_player_regiment_header:0 "玩家头衔兵士"
+ tmm_window_clear_btn:0 "清除"
+ tmm_window_no_title_hint:0 "点击上方头衔按钮，查看对应兵团"
+
+ # --- 十三、个人头衔兵士互转（PT 窗口） ---
+tmm_personal_title_maa_interaction:0 "个人头衔兵士互转（天下兵马）"
+tmm_personal_title_maa_interaction_desc:0 "在个人私兵与头衔兵士之间双向转移：左侧点击私兵卡片转入选中头衔，右侧先选头衔再点击兵团卡片转为私兵。"
+ tmm_pt_window_title:0 "个人头衔兵士互转（天下兵马）"
+ tmm_pt_left_hint:0 "点击军团卡片转入选中头衔"
+ tmm_pt_right_hint:0 "下方军团卡片点击转为私兵"
+ tmm_pt_title_list_label:0 "选择目标头衔"
+ tmm_pt_province_label:0 "头衔兵士列表"
+ tmm_pt_instruction:0 "左侧：点击私兵卡片转入右侧选中头衔。右侧：先选头衔，再点击兵团卡片转为私兵。"
+ tmm_pt_personal_header:0 "个人私兵"
+ tmm_pt_title_header:0 "头衔兵士"
+ tmm_pt_regiment_header:0 "选中头衔的兵团"
+ tmm_pt_clear_btn:0 "清除"
+ tmm_pt_no_personal:0 "你暂无个人私兵。\n可使用「军队私有化」互动将头衔兵转为私兵。"
+ tmm_pt_no_title_selected:0 "请在上方头衔列表中点击选择一个头衔。"
+ tmm_pt_no_regiments:0 "该头衔下暂无兵士。\n请在上方选择其他头衔。"
+
+ # === V3 旧 key（保留存底，不再被窗口引用） ===
+ tmm_window_current_title_label:0 "◆ [GetPlayer.GetVariable('tmm_current_title_name').GetNameNoTooltip] · [GetListSize('tmm_maa_regiments')|V0]支兵团"
+ tmm_window_transfer_all:0 "全部收回"
