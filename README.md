@@ -1,4 +1,4 @@
-# 节制天下兵马！｜头衔兵士管理
+**# 节制天下兵马！｜头衔兵士管理
 
 **Title Men-at-Arms Manager** · Crusader Kings III（十字军之王 III）Mod
 
@@ -40,3 +40,4 @@
 ---
 
 *本仓库作为源码归档与问题跟踪入口。Steam 创意工坊仍为玩家获取 Mod 的发布渠道。*
+**
