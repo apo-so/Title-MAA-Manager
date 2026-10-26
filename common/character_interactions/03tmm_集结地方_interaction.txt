@@ -1,0 +1,497 @@
+# ===================================================
+# 功能：将自身非首都直辖头衔下的头衔兵召回/集中至中央（绝对流向同步版）
+# 说明：通过send_option选兵种，将地方头衔兵集结至actor首都
+# ===================================================
+tmm_rally_local_interaction = {
+	category = interaction_category_diplomacy
+	target_type = title
+	target_filter = actor_domain_titles
+	icon = request_maa_interaction
+	common_interaction = no
+	interface_priority = 100
+	desc = tmm_rally_local_interaction_desc
+	auto_accept = yes
+	
+	# --- 一、交互是否显示 ---
+	is_shown = {
+		scope:actor = scope:recipient
+		
+		scope:actor = {
+			
+			# 非首都存在驻防兵
+			any_held_title = {
+				count >= 1
+				
+				NOT = {
+					this = scope:actor.primary_title
+				}
+
+				any_owned_title_maa_regiment = {
+					count >= 1
+				}
+			}
+		}
+	}
+
+	# --- 二、可选择的目标头衔条件限制 ---
+	can_be_picked_title = {
+		scope:target = {
+			is_leased_out = no
+
+			# 不能选择首都
+			NOT = {
+				this = scope:actor.primary_title
+			}
+
+			# 必须有兵
+			any_owned_title_maa_regiment = {
+				count >= 1
+			}
+		}
+	}
+
+	# =====================================================
+	# 三、选项区（根据点击的自身目标地方头衔兵力动态显示）
+	# =====================================================
+
+	# 全部头衔兵士
+	send_option = {
+		flag = all_title_maa
+		localization = all_title_maa
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { count >= 1 } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 散兵
+	send_option = {
+		flag = skirmishers
+		localization = skirmishers
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = skirmishers } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 弓箭手
+	send_option = {
+		flag = archers
+		localization = archers
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = archers } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 重步兵
+	send_option = {
+		flag = heavy_infantry
+		localization = heavy_infantry
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = heavy_infantry } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 重骑兵
+	send_option = {
+		flag = heavy_cavalry
+		localization = heavy_cavalry
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = heavy_cavalry } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 轻骑兵
+	send_option = {
+		flag = light_cavalry
+		localization = light_cavalry
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = light_cavalry } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 长矛兵
+	send_option = {
+		flag = pikemen
+		localization = pikemen
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = pikemen } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 攻城武器
+	send_option = {
+		flag = siege_weapon
+		localization = siege_weapon
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = siege_weapon } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 骆驼骑兵
+	send_option = {
+		flag = camel_cavalry
+		localization = camel_cavalry
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = camel_cavalry } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 战象骑兵
+	send_option = {
+		flag = elephant_cavalry
+		localization = elephant_cavalry
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = elephant_cavalry } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 骑射手
+	send_option = {
+		flag = archer_cavalry
+		localization = archer_cavalry
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = archer_cavalry } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 火药部队
+	send_option = {
+		flag = gunpowder
+		localization = gunpowder
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = gunpowder } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 游牧部队
+	send_option = {
+		flag = nomadic_horde
+		localization = nomadic_horde
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = nomadic_horde } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 其他未知特殊兵种
+	send_option = {
+		flag = other_type
+		localization = other_type
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = {
+					any_owned_title_maa_regiment = {
+						NOR = {
+							is_unit_type = skirmishers
+							is_unit_type = heavy_cavalry
+							is_unit_type = pikemen
+							is_unit_type = heavy_infantry
+							is_unit_type = siege_weapon
+							is_unit_type = archers
+							is_unit_type = light_cavalry
+							is_unit_type = camel_cavalry
+							is_unit_type = elephant_cavalry
+							is_unit_type = archer_cavalry
+							is_unit_type = gunpowder
+							is_unit_type = nomadic_horde
+						}
+					}
+				}
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# =====================================================
+	# 四、执行逻辑结算区（贯彻：先隐性清洗，后显性过户）
+	# =====================================================
+	on_accept = {
+
+		# --- 1. 批量召回全部兵（自带循环保护） ---
+		if = {
+			limit = { scope:all_title_maa = yes }
+			scope:target = {
+				every_owned_title_maa_regiment = {
+					save_temporary_scope_as = old_regiment
+					
+					scope:actor = { tmm_transfer_maa_up = yes }
+					scope:old_regiment = { transfer_title_maa = scope:actor.primary_title }
+				}
+			}
+		}
+
+		# --- 2. 轻骑兵 ---
+		if = {
+			limit = {
+				scope:light_cavalry = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = light_cavalry }
+					save_temporary_scope_as = old_regiment
+				}
+			}
+			scope:actor = { tmm_transfer_maa_up = yes }
+			scope:old_regiment = { transfer_title_maa = scope:actor.primary_title }
+		}
+
+		# --- 3. 长枪兵 ---
+		if = {
+			limit = {
+				scope:pikemen = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = pikemen }
+					save_temporary_scope_as = old_regiment
+				}
+			}
+			scope:actor = { tmm_transfer_maa_up = yes }
+			scope:old_regiment = { transfer_title_maa = scope:actor.primary_title }
+		}
+
+		# --- 4. 散兵 ---
+		if = {
+			limit = {
+				scope:skirmishers = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = skirmishers }
+					save_temporary_scope_as = old_regiment
+				}
+			}
+			scope:actor = { tmm_transfer_maa_up = yes }
+			scope:old_regiment = { transfer_title_maa = scope:actor.primary_title }
+		}
+
+		# --- 5. 重步兵 ---
+		if = {
+			limit = {
+				scope:heavy_infantry = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = heavy_infantry }
+					save_temporary_scope_as = old_regiment
+				}
+			}
+			scope:actor = { tmm_transfer_maa_up = yes }
+			scope:old_regiment = { transfer_title_maa = scope:actor.primary_title }
+		}
+
+		# --- 6. 重骑兵 ---
+		if = {
+			limit = {
+				scope:heavy_cavalry = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = heavy_cavalry }
+					save_temporary_scope_as = old_regiment
+				}
+			}
+			scope:actor = { tmm_transfer_maa_up = yes }
+			scope:old_regiment = { transfer_title_maa = scope:actor.primary_title }
+		}
+
+		# --- 7. 弓箭手 ---
+		if = {
+			limit = {
+				scope:archers = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = archers }
+					save_temporary_scope_as = old_regiment
+				}
+			}
+			scope:actor = { tmm_transfer_maa_up = yes }
+			scope:old_regiment = { transfer_title_maa = scope:actor.primary_title }
+		}
+
+		# --- 8. 攻城武器 ---
+		if = {
+			limit = {
+				scope:siege_weapon = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = siege_weapon }
+					save_temporary_scope_as = old_regiment
+				}
+			}
+			scope:actor = { tmm_transfer_maa_up = yes }
+			scope:old_regiment = { transfer_title_maa = scope:actor.primary_title }
+		}
+
+		# --- 9. 骆驼骑兵 ---
+		if = {
+			limit = {
+				scope:camel_cavalry = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = camel_cavalry }
+					save_temporary_scope_as = old_regiment
+				}
+			}
+			scope:actor = { tmm_transfer_maa_up = yes }
+			scope:old_regiment = { transfer_title_maa = scope:actor.primary_title }
+		}
+
+		# --- 10. 战象 ---
+		if = {
+			limit = {
+				scope:elephant_cavalry = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = elephant_cavalry }
+					save_temporary_scope_as = old_regiment
+				}
+			}
+			scope:actor = { tmm_transfer_maa_up = yes }
+			scope:old_regiment = { transfer_title_maa = scope:actor.primary_title }
+		}
+
+		# --- 11. 骑射手 ---
+		if = {
+			limit = {
+				scope:archer_cavalry = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = archer_cavalry }
+					save_temporary_scope_as = old_regiment
+				}
+			}
+			scope:actor = { tmm_transfer_maa_up = yes }
+			scope:old_regiment = { transfer_title_maa = scope:actor.primary_title }
+		}
+
+		# --- 12. 火药部队 ---
+		if = {
+			limit = {
+				scope:gunpowder = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = gunpowder }
+					save_temporary_scope_as = old_regiment
+				}
+			}
+			scope:actor = { tmm_transfer_maa_up = yes }
+			scope:old_regiment = { transfer_title_maa = scope:actor.primary_title }
+		}
+
+		# --- 13. 游牧部队 ---
+		if = {
+			limit = {
+				scope:nomadic_horde = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = nomadic_horde }
+					save_temporary_scope_as = old_regiment
+				}
+			}
+			scope:actor = { tmm_transfer_maa_up = yes }
+			scope:old_regiment = { transfer_title_maa = scope:actor.primary_title }
+		}
+
+		# --- 14. 其他特殊兵种 ---
+		if = {
+			limit = {
+				scope:other_type = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = {
+						NOR = {
+							is_unit_type = skirmishers
+							is_unit_type = heavy_cavalry
+							is_unit_type = pikemen
+							is_unit_type = heavy_infantry
+							is_unit_type = siege_weapon
+							is_unit_type = archers
+							is_unit_type = light_cavalry
+							is_unit_type = camel_cavalry
+							is_unit_type = elephant_cavalry
+							is_unit_type = archer_cavalry
+							is_unit_type = gunpowder
+							is_unit_type = nomadic_horde
+						}
+					}
+					save_temporary_scope_as = old_regiment
+				}
+			}
+			scope:actor = { tmm_transfer_maa_up = yes }
+			scope:old_regiment = { transfer_title_maa = scope:actor.primary_title }
+		}
+	}
+}

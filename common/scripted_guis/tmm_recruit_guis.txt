@@ -1,0 +1,94 @@
+﻿# Destination selection has no government, native-title-list, tier or price gate.
+tmm_recruit_select_target = {
+    scope = character
+    is_valid = { exists = scope:title }
+    effect = {
+        set_variable = { name = tmm_recruit_target value = scope:title }
+        remove_variable = tmm_recruit_success
+        remove_variable = tmm_recruit_failed
+    }
+}
+tmm_recruit_target_active = {
+    scope = character
+    is_shown = { has_variable = tmm_recruit_target exists = var:tmm_recruit_target }
+}
+tmm_recruit_success_status = {
+    scope = character
+    is_shown = { has_variable = tmm_recruit_success }
+}
+tmm_recruit_failure_status = {
+    scope = character
+    is_shown = { has_variable = tmm_recruit_failed }
+}
+tmm_recruit_cancel_target = {
+    scope = character
+    effect = {
+        remove_variable = tmm_recruit_target
+        remove_variable = tmm_recruit_source
+        remove_variable = tmm_recruit_prepared
+        remove_variable = tmm_recruit_success
+        remove_variable = tmm_recruit_failed
+        clear_variable_list = tmm_recruit_source_before
+    }
+}
+tmm_recruit_prepare_native = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = tmm_recruit_actor
+        remove_variable = tmm_recruit_prepared
+        remove_variable = tmm_recruit_success
+        remove_variable = tmm_recruit_failed
+        clear_variable_list = tmm_recruit_source_before
+        if = {
+            limit = { exists = scope:source_title has_variable = tmm_recruit_target exists = var:tmm_recruit_target }
+            set_variable = { name = tmm_recruit_source value = scope:source_title }
+            scope:source_title = {
+                every_owned_title_maa_regiment = {
+                    save_temporary_scope_as = tmm_recruit_existing
+                    scope:tmm_recruit_actor = {
+                        add_to_variable_list = { name = tmm_recruit_source_before target = scope:tmm_recruit_existing }
+                    }
+                }
+            }
+            set_variable = { name = tmm_recruit_prepared value = yes }
+        }
+    }
+}
+tmm_recruit_finish_native = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = tmm_recruit_actor
+        if = {
+            limit = { has_variable = tmm_recruit_prepared exists = var:tmm_recruit_source exists = var:tmm_recruit_target }
+            var:tmm_recruit_source = { save_temporary_scope_as = tmm_recruit_source }
+            var:tmm_recruit_target = { save_temporary_scope_as = tmm_recruit_target }
+            set_variable = { name = tmm_recruit_source_count value = 0 }
+            clear_saved_scope = tmm_recruit_source_regiment
+            scope:tmm_recruit_source = {
+                every_owned_title_maa_regiment = {
+                    save_temporary_scope_as = tmm_recruit_candidate
+                    scope:tmm_recruit_actor = {
+                        if = {
+                            limit = { NOT = { is_target_in_variable_list = { name = tmm_recruit_source_before target = scope:tmm_recruit_candidate } } }
+                            change_variable = { name = tmm_recruit_source_count add = 1 }
+                            scope:tmm_recruit_candidate = { save_temporary_scope_as = tmm_recruit_source_regiment }
+                        }
+                    }
+                }
+            }
+            if = {
+                limit = { var:tmm_recruit_source_count = 1 exists = scope:tmm_recruit_source_regiment }
+                if = {
+                    limit = { scope:tmm_recruit_source = scope:tmm_recruit_target }
+                    set_variable = { name = tmm_recruit_success value = yes }
+                }
+                else = { tmm_recruit_move_created_effect = yes }
+            }
+            else = { set_variable = { name = tmm_recruit_failed value = yes } }
+        }
+        clear_variable_list = tmm_recruit_source_before
+        remove_variable = tmm_recruit_prepared
+        remove_variable = tmm_recruit_source
+        remove_variable = tmm_recruit_source_count
+    }
+}

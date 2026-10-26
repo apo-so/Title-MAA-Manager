@@ -1,0 +1,54 @@
+# ===================================================
+# 功能：吃皇粮 — 将个人常备军编入头衔编制
+# 说明：选择一支个人常备军（非头衔兵），将其转移至目标头衔下成为头衔兵士
+# ===================================================
+tmm_set_title_maa_interaction = {
+	category = interaction_category_vassal
+	target_type = men_at_arms
+	target_filter = actor_personal_maa
+	#target_filter = actor_title_maa
+	icon = request_maa_interaction
+	common_interaction = yes
+	desc = tmm_set_title_maa_interaction_desc
+	auto_accept = yes
+	ai_frequency = 0
+	
+	is_available = {
+		# 修改：用 OR 显式包含公爵到霸权的所有级别，防止因自定义级别导致 >= 判定失效
+		OR = {
+			highest_held_title_tier = tier_duchy
+			highest_held_title_tier = tier_kingdom
+			highest_held_title_tier = tier_empire
+			highest_held_title_tier = tier_hegemony
+		}
+	}
+	is_shown = {
+		scope:actor = scope:recipient
+		#scope:actor != scope:recipient
+	}
+	has_valid_target_showing_failures_only = {
+		# 修正：去掉了不稳定的 ?= 符号，使逻辑更稳固
+		scope:target = {
+			#is_title_maa_regiment = yes
+			#any_owned_title_maa_regiment = { count >= 1 }
+		}
+	}
+	is_valid_showing_failures_only = {
+		scope:actor = {
+			is_at_war = no
+		}
+	}
+	on_accept = {
+		scope:target = {
+			save_temporary_scope_as = old_regiment
+		}
+		scope:recipient = {
+			primary_title = {
+				save_temporary_scope_as = target_title
+			}
+		}
+		scope:actor = {
+			owned_army_transfer_title_maa = yes
+		}
+	}
+}

@@ -1,0 +1,151 @@
+# ===================================================
+# 功能：下级移隶事件 — 将下属总督头衔兵移交给指定总督
+# 说明：提供按层级（王国/公国/伯爵/男爵/全部）选择移隶范围的选项
+# ===================================================
+namespace = tmm_subordinate_reassign
+
+tmm_subordinate_reassign.0001 = {
+    type = character_event
+    title = tmm_subordinate_reassign.0001.t
+    desc = tmm_subordinate_reassign.0001.desc
+    theme = war
+
+    left_portrait = root
+    right_portrait = scope:tmm_subordinate_reassign_target
+
+    # =====================================================
+    # 选项一：王国级下属总督移隶
+    # 目标总督必须是帝国级
+    # =====================================================
+    option = {
+        name = tmm_subordinate_reassign.0001.kingdom
+
+        hidden_effect = {
+            scope:tmm_subordinate_reassign_target = {
+                save_temporary_scope_as = receiving_governor
+                primary_title = { save_temporary_scope_as = receiving_title }
+
+                every_vassal_or_below = {
+                    limit = {
+                        highest_held_title_tier = tier_kingdom
+                    }
+
+                    every_held_title = {
+                        every_owned_title_maa_regiment = {
+                            limit = { is_personal_maa_regiment = no }
+                            transfer_title_maa = scope:receiving_title
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    # =====================================================
+    # 选项二：公国级下属总督移隶
+    # =====================================================
+    option = {
+        name = tmm_subordinate_reassign.0001.duchy
+
+        hidden_effect = {
+            scope:tmm_subordinate_reassign_target = {
+                save_temporary_scope_as = receiving_governor
+                primary_title = { save_temporary_scope_as = receiving_title }
+
+                every_vassal_or_below = {
+                    limit = { highest_held_title_tier = tier_duchy }
+
+                    every_held_title = {
+                        every_owned_title_maa_regiment = {
+                            limit = { is_personal_maa_regiment = no }
+                            transfer_title_maa = scope:receiving_title
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    # =====================================================
+    # 选项三：伯爵级下属总督移隶
+    # =====================================================
+    option = {
+        name = tmm_subordinate_reassign.0001.county
+
+        hidden_effect = {
+            scope:tmm_subordinate_reassign_target = {
+                save_temporary_scope_as = receiving_governor
+                primary_title = { save_temporary_scope_as = receiving_title }
+
+                every_vassal_or_below = {
+                    limit = { highest_held_title_tier = tier_county }
+
+                    every_held_title = {
+                        every_owned_title_maa_regiment = {
+                            limit = { is_personal_maa_regiment = no }
+                            transfer_title_maa = scope:receiving_title
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    # =====================================================
+    # 选项四：男爵级下属总督移隶
+    # =====================================================
+    option = {
+        name = tmm_subordinate_reassign.0001.barony
+
+        hidden_effect = {
+            scope:tmm_subordinate_reassign_target = {
+                save_temporary_scope_as = receiving_governor
+                primary_title = { save_temporary_scope_as = receiving_title }
+
+                every_vassal_or_below = {
+                    limit = { highest_held_title_tier = tier_barony }
+
+                    every_held_title = {
+                        every_owned_title_maa_regiment = {
+                            limit = { is_personal_maa_regiment = no }
+                            transfer_title_maa = scope:receiving_title
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    # =====================================================
+    # 选项五：所有下属总督移隶
+    # 无武职限制
+    # =====================================================
+    option = {
+        name = tmm_subordinate_reassign.0001.all_governors
+
+        hidden_effect = {
+            scope:tmm_subordinate_reassign_target = {
+                save_temporary_scope_as = receiving_governor
+                primary_title = { save_temporary_scope_as = receiving_title }
+
+                every_vassal_or_below = {
+                    limit = { highest_held_title_tier >= tier_barony }
+
+                    every_held_title = {
+                        every_owned_title_maa_regiment = {
+                            limit = { is_personal_maa_regiment = no }
+                            transfer_title_maa = scope:receiving_title
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    # =====================================================
+    # 选项六：取消
+    # =====================================================
+    option = {
+        name = tmm_subordinate_reassign.0001.cancel
+    }
+}

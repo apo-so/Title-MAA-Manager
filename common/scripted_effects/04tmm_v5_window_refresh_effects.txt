@@ -1,0 +1,110 @@
+# ===================================================
+# TMM V5.1 — 双头衔互转窗口兵团列表刷新
+# 调用方必须处于玩家 character scope。
+# 左右头衔候选列表保持不变；这里只重建当前选中头衔的兵团列表。
+# ===================================================
+tmm_v5_refresh_regiment_lists = {
+    save_temporary_scope_as = tmm_v5_root
+
+    clear_variable_list = tmm_vassal_regiments
+    clear_variable_list = tmm_player_regiments
+
+    if = {
+        limit = {
+            has_variable = tmm_has_vassal_title
+            exists = scope:tmm_v5_vassal_selected_title
+        }
+        scope:tmm_v5_vassal_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_v5_root = {
+                    add_to_variable_list = {
+                        name = tmm_vassal_regiments
+                        target = prev
+                    }
+                }
+            }
+        }
+    }
+
+    if = {
+        limit = {
+            has_variable = tmm_has_player_title
+            exists = scope:tmm_v5_player_selected_title
+        }
+        scope:tmm_v5_player_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_v5_root = {
+                    add_to_variable_list = {
+                        name = tmm_player_regiments
+                        target = prev
+                    }
+                }
+            }
+        }
+    }
+}
+
+# ===================================================
+# TMM V5.4 — 开窗默认选中两侧第一个头衔
+# 由 14/15 互动 on_accept 在头衔列表填充完后调用（玩家 scope）。
+# 注意：scripted_effects 必须用直接函数体格式，不能写 scope = / effect = 包裹
+# （那是 scripted_guis 的格式；写错会导致整条定义被解析器丢弃，见 2026-08-28 error.log）。
+# 状态写入与手动点击 tmm_v5_select_vassal_title / tmm_v5_select_player_title 一致：
+# tmm_v5_fv / tmm_v5_fp 头衔标记、tmm_v5_*_title 显示变量、has_* 标志、兵团列表。
+# 取第一项用 V4 验证过的 save_scope_as + exists = scope: 守卫模式。
+# ===================================================
+tmm_v5_default_select_titles = {
+    save_temporary_scope_as = tmm_v5_dsel_root
+
+    # 防御性清空（正常已由互动开窗清理完成），保证下方直接填充结果干净
+    clear_variable_list = tmm_vassal_regiments
+    clear_variable_list = tmm_player_regiments
+
+    # --- 找出两侧列表的第一项（仅第一项未被守卫拦下） ---
+    every_in_list = {
+        variable = tmm_vassal_titles
+        if = {
+            limit = { NOT = { exists = scope:tmm_v5_first_vassal } }
+            save_scope_as = tmm_v5_first_vassal
+        }
+    }
+    every_in_list = {
+        variable = tmm_player_titles
+        if = {
+            limit = { NOT = { exists = scope:tmm_v5_first_player } }
+            save_scope_as = tmm_v5_first_player
+        }
+    }
+
+    # --- 封臣侧：按手动点击头衔的语义写入选中状态 ---
+    if = {
+        limit = { exists = scope:tmm_v5_first_vassal }
+        scope:tmm_v5_first_vassal = { set_variable = { name = tmm_v5_fv value = flag:yes } }
+        set_variable = { name = tmm_v5_vassal_title value = scope:tmm_v5_first_vassal }
+        set_variable = { name = tmm_has_vassal_title value = flag:yes }
+        clear_variable_list = tmm_vassal_regiments
+        scope:tmm_v5_first_vassal = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_v5_dsel_root = {
+                    add_to_variable_list = { name = tmm_vassal_regiments target = prev }
+                }
+            }
+        }
+    }
+
+    # --- 玩家侧：同上 ---
+    if = {
+        limit = { exists = scope:tmm_v5_first_player }
+        scope:tmm_v5_first_player = { set_variable = { name = tmm_v5_fp value = flag:yes } }
+        set_variable = { name = tmm_v5_player_title value = scope:tmm_v5_first_player }
+        set_variable = { name = tmm_has_player_title value = flag:yes }
+        clear_variable_list = tmm_player_regiments
+        scope:tmm_v5_first_player = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_v5_dsel_root = {
+                    add_to_variable_list = { name = tmm_player_regiments target = prev }
+                }
+            }
+        }
+    }
+}

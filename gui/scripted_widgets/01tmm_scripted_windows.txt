@@ -1,0 +1,4 @@
+# TMM — Scripted Widget Registration
+# 注册自定义窗口使其在游戏加载时自动创建
+gui/01tmm_select_maa_window.gui = tmm_select_maa_window
+gui/02tmm_personal_maa_window.gui = tmm_personal_title_maa_window

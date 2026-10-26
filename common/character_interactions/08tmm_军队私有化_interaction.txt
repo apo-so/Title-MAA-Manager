@@ -1,0 +1,58 @@
+# ===================================================
+# 功能：军队私有化 — 将头衔常备军转化为个人私兵
+# 说明：选择一支头衔兵士，通过清洗重建将其转化为actor个人常备军
+# ===================================================
+tmm_privatize_interaction = {
+category = interaction_category_vassal
+target_type = men_at_arms
+target_filter = actor_title_maa
+icon = request_maa_interaction
+common_interaction = yes
+desc = tmm_privatize_interaction_desc
+auto_accept = yes
+ai_frequency = 0
+
+is_available = {
+	highest_held_title_tier >= tier_duchy
+}
+
+is_shown = {
+	scope:actor = scope:recipient
+}
+
+has_valid_target_showing_failures_only = {
+	scope:target ?= {
+		is_title_maa_regiment = yes
+	}
+}
+
+is_valid_showing_failures_only = {
+	scope:actor = {
+		is_at_war = no
+
+		primary_title = {
+			any_title_maa_regiment = {
+				count >= 1
+			}
+		}
+	}
+}
+
+on_accept = {
+	scope:actor = {
+		primary_title = {
+			save_temporary_scope_as = target_title
+		}
+	}
+
+	scope:target = {
+		save_temporary_scope_as = old_regiment
+	}
+
+	scope:actor = {
+		tmm_privatize_maa = yes
+	}
+}
+
+
+}

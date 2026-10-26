@@ -1,0 +1,1011 @@
+# ===================================================
+# 功能：GUI 宏 — 为窗口界面添加头衔兵士
+# 说明：在 GUI 交互中将首都头衔兵士复制到目标头衔并删除源兵团
+# ===================================================
+
+
+##################################################################
+# TMM 头衔选兵 V4 — 双面板互转
+# 架构：左侧封臣面板 + 右侧玩家面板，各自独立选头衔、选兵团、双向转移
+# 变量列表：tmm_vassal_title_list / tmm_actor_title_list / tmm_vassal_maa_list / tmm_actor_maa_list
+# 选中 scope：tmm_vassal_selected_title / tmm_actor_selected_title
+# 选中兵团：tmm_vassal_selected_regiment / tmm_actor_selected_regiment
+##################################################################
+
+# ===================================================
+# V4 — 窗口初始化（由 on_start 调用）
+# 填充四个变量列表 + 默认选中第一个头衔
+# ===================================================
+tmm_window_init_all_V4 = {
+    scope = character
+    effect = {
+        # 0. 保存玩家 scope 引用，避免嵌套链中 scope:actor 解析失效
+        save_temporary_scope_as = tmm_player
+
+        # 清空所有列表和选中状态
+        clear_variable_list = tmm_vassal_title_list
+        clear_variable_list = tmm_actor_title_list
+        clear_variable_list = tmm_vassal_maa_list
+        clear_variable_list = tmm_actor_maa_list
+        remove_variable = tmm_vassal_selected_regiment
+        remove_variable = tmm_actor_selected_regiment
+        remove_variable = tmm_has_vassal_selected
+        remove_variable = tmm_has_actor_selected
+        remove_variable = tmm_v4_vassal_selected_name
+        remove_variable = tmm_v4_actor_selected_name
+
+        # 1. 填充封臣标题列表
+        scope:tmm_vassal = {
+            every_held_title = {
+                limit = {
+                    any_owned_title_maa_regiment = { count >= 1 }
+                }
+                scope:tmm_player = {
+                    add_to_variable_list = {
+                        name = tmm_vassal_title_list
+                        target = prev
+                    }
+                }
+                if = {
+                    limit = {
+                        NOT = { exists = scope:tmm_vassal_selected_title }
+                    }
+                    save_scope_as = tmm_vassal_selected_title
+                }
+            }
+        }
+
+        # 将封臣默认选中头衔名字保存到变量
+        scope:tmm_vassal_selected_title = {
+            scope:tmm_player = {
+                save_scope_value_as = {
+                    name = tmm_v4_vassal_title_name
+                    value = prev.title
+                }
+            }
+        }
+
+        # 2. 填充玩家标题列表
+        scope:tmm_player = {
+            every_held_title = {
+                limit = {
+                    any_owned_title_maa_regiment = { count >= 1 }
+                }
+                add_to_variable_list = {
+                    name = tmm_actor_title_list
+                    target = prev
+                }
+                if = {
+                    limit = {
+                        NOT = { exists = scope:tmm_actor_selected_title }
+                    }
+                    save_scope_as = tmm_actor_selected_title
+                }
+            }
+        }
+
+        # 将玩家默认选中头衔名字保存到变量
+        scope:tmm_actor_selected_title = {
+            scope:tmm_player = {
+                save_scope_value_as = {
+                    name = tmm_v4_actor_title_name
+                    value = prev.title
+                }
+            }
+        }
+
+        # 3. 填充封臣默认选中头衔的兵团列表
+        scope:tmm_vassal_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_player = {
+                    add_to_variable_list = {
+                        name = tmm_vassal_maa_list
+                        target = prev
+                    }
+                }
+            }
+        }
+        
+        # 4. 填充玩家默认选中头衔的兵团列表
+        scope:tmm_actor_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_player = {
+                    add_to_variable_list = {
+                        name = tmm_actor_maa_list
+                        target = prev
+                    }
+                }
+            }
+        }
+    }
+}
+
+# ===================================================
+# V4 — 封臣侧：切换选中头衔
+# scope:title 由 onclick 的 AddScope('title', Title.MakeScope) 传入
+# ===================================================
+tmm_v4_select_vassal_title = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = tmm_player
+        
+        scope:title = {
+            save_scope_as = tmm_vassal_selected_title
+            scope:tmm_player = {
+                save_scope_value_as = {
+                    name = tmm_v4_vassal_title_name
+                    value = prev.title
+                }
+            }
+        }
+
+        remove_variable = tmm_vassal_selected_regiment
+        remove_variable = tmm_v4_vassal_selected_name
+        remove_variable = tmm_has_vassal_selected
+
+        scope:tmm_player = {
+            clear_variable_list = tmm_vassal_maa_list
+        }
+        scope:tmm_vassal_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_player = {
+                    add_to_variable_list = {
+                        name = tmm_vassal_maa_list
+                        target = prev
+                    }
+                }
+            }
+        }
+    }
+}
+
+# ===================================================
+# V4 — 玩家侧：切换选中头衔
+# scope:title 由 onclick 的 AddScope('title', Title.MakeScope) 传入
+# ===================================================
+tmm_v4_select_actor_title = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = tmm_player
+        
+        scope:title = {
+            save_scope_as = tmm_actor_selected_title
+            scope:tmm_player = {
+                save_scope_value_as = {
+                    name = tmm_v4_actor_title_name
+                    value = prev.title
+                }
+            }
+        }
+
+        remove_variable = tmm_actor_selected_regiment
+        remove_variable = tmm_has_actor_selected
+        remove_variable = tmm_v4_actor_selected_name
+
+        scope:tmm_player = {
+            clear_variable_list = tmm_actor_maa_list
+        }
+        scope:tmm_actor_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_player = {
+                    add_to_variable_list = {
+                        name = tmm_actor_maa_list
+                        target = prev
+                    }
+                }
+            }
+        }
+    }
+}
+
+# ===================================================
+# V4 — 封臣侧：选中兵团
+# scope:regiment 由 onclick 的 AddScope('regiment', Regiment.MakeScope) 传入
+# ===================================================
+tmm_v4_select_vassal_regiment = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = tmm_player
+
+        scope:regiment = {
+            save_scope_as = tmm_vassal_selected_regiment
+            scope:tmm_player = {
+                save_scope_value_as = {
+                    name = tmm_v4_vassal_selected_name
+                    value = prev.title
+                }
+            }
+        }
+        # 设置伴生变量供 GUI visible 判断
+        set_variable = { name = tmm_has_vassal_selected value = flag:yes }
+    }
+}
+
+# ===================================================
+# V4 — 玩家侧：选中兵团
+# scope:regiment 由 onclick 的 AddScope('regiment', Regiment.MakeScope) 传入
+# ===================================================
+tmm_v4_select_actor_regiment = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = tmm_player
+
+        scope:regiment = {
+            save_scope_as = tmm_actor_selected_regiment
+            scope:tmm_player = {
+                save_scope_value_as = {
+                    name = tmm_v4_actor_selected_name
+                    value = prev.title
+                }
+            }
+        }
+        set_variable = { name = tmm_has_actor_selected value = flag:yes }
+    }
+}
+
+# ===================================================
+# V4 — ←收回（封臣选中兵团 → 玩家当前头衔）
+# 使用 tmm_army_transfer_title_maa，以玩家选中头衔为目标
+# ===================================================
+tmm_v4_transfer_to_player = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = tmm_player
+
+        # 设置转移参数：old_regiment = 封臣选中兵团，target_title = 玩家当前头衔
+        scope:tmm_vassal_selected_regiment = {
+            save_temporary_scope_as = old_regiment
+        }
+        scope:tmm_actor_selected_title = {
+            save_temporary_scope_as = target_title
+        }
+
+        # 执行转移
+        tmm_army_transfer_title_maa = yes
+
+        # 清除封臣侧选中兵团
+        remove_variable = tmm_vassal_selected_regiment
+        remove_variable = tmm_v4_vassal_selected_name
+        remove_variable = tmm_has_vassal_selected
+
+        # 刷新两侧兵团列表
+        scope:tmm_player = {
+            clear_variable_list = tmm_vassal_maa_list
+            clear_variable_list = tmm_actor_maa_list
+        }
+        scope:tmm_vassal_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_player = {
+                    add_to_variable_list = {
+                        name = tmm_vassal_maa_list
+                        target = prev
+                    }
+                }
+            }
+        }
+        scope:tmm_actor_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_player = {
+                    add_to_variable_list = {
+                        name = tmm_actor_maa_list
+                        target = prev
+                    }
+                }
+            }
+        }
+    }
+}
+
+# ===================================================
+# V4 — 选派→（玩家选中兵团 → 封臣当前头衔）
+# 使用 tmm_army_transfer_title_maa，以封臣选中头衔为目标
+# ===================================================
+tmm_v4_transfer_to_vassal = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = tmm_player
+
+        # 设置转移参数：old_regiment = 玩家选中兵团，target_title = 封臣当前头衔
+        scope:tmm_actor_selected_regiment = {
+            save_temporary_scope_as = old_regiment
+        }
+        scope:tmm_vassal_selected_title = {
+            save_temporary_scope_as = target_title
+        }
+
+        # 执行转移
+        tmm_army_transfer_title_maa = yes
+
+        # 清除玩家侧选中兵团
+        remove_variable = tmm_actor_selected_regiment
+        remove_variable = tmm_has_actor_selected
+        remove_variable = tmm_v4_actor_selected_name
+
+        # 刷新两侧兵团列表
+        scope:tmm_player = {
+            clear_variable_list = tmm_vassal_maa_list
+            clear_variable_list = tmm_actor_maa_list
+        }
+        scope:tmm_vassal_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_player = {
+                    add_to_variable_list = {
+                        name = tmm_vassal_maa_list
+                        target = prev
+                    }
+                }
+            }
+        }
+        scope:tmm_actor_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_player = {
+                    add_to_variable_list = {
+                        name = tmm_actor_maa_list
+                        target = prev
+                    }
+                }
+            }
+        }
+    }
+}
+
+# ===================================================
+# V4 — 全部收回（封臣当前头衔全部兵团 → 玩家当前头衔）
+# 遍历封臣当前选中头衔的所有兵团，逐个转移至玩家当前选中头衔
+# ===================================================
+tmm_v4_transfer_all_to_player = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = tmm_player
+
+        scope:tmm_vassal_selected_title = {
+            every_owned_title_maa_regiment = {
+                save_temporary_scope_as = old_regiment
+                scope:tmm_actor_selected_title = {
+                    save_temporary_scope_as = target_title
+                }
+                tmm_army_transfer_title_maa = yes
+            }
+        }
+
+        # 清除封臣侧选中兵团
+        remove_variable = tmm_vassal_selected_regiment
+        remove_variable = tmm_v4_vassal_selected_name
+        remove_variable = tmm_has_vassal_selected
+
+        # 刷新两侧兵团列表
+        scope:tmm_player = {
+            clear_variable_list = tmm_vassal_maa_list
+            clear_variable_list = tmm_actor_maa_list
+        }
+        scope:tmm_vassal_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_player = {
+                    add_to_variable_list = {
+                        name = tmm_vassal_maa_list
+                        target = prev
+                    }
+                }
+            }
+        }
+        scope:tmm_actor_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_player = {
+                    add_to_variable_list = {
+                        name = tmm_actor_maa_list
+                        target = prev
+                    }
+                }
+            }
+        }
+    }
+}
+
+# ===================================================
+# V4 — 全部选派（玩家当前头衔全部兵团 → 封臣当前头衔）
+# 遍历玩家当前选中头衔的所有兵团，逐个转移至封臣当前选中头衔
+# ===================================================
+tmm_v4_transfer_all_to_vassal = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = tmm_player
+
+        scope:tmm_actor_selected_title = {
+            every_owned_title_maa_regiment = {
+                save_temporary_scope_as = old_regiment
+                scope:tmm_vassal_selected_title = {
+                    save_temporary_scope_as = target_title
+                }
+                tmm_army_transfer_title_maa = yes
+            }
+        }
+
+        # 清除玩家侧选中兵团
+        remove_variable = tmm_actor_selected_regiment
+        remove_variable = tmm_has_actor_selected
+        remove_variable = tmm_v4_actor_selected_name
+
+        # 刷新两侧兵团列表
+        scope:tmm_player = {
+            clear_variable_list = tmm_vassal_maa_list
+            clear_variable_list = tmm_actor_maa_list
+        }
+        scope:tmm_vassal_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_player = {
+                    add_to_variable_list = {
+                        name = tmm_vassal_maa_list
+                        target = prev
+                    }
+                }
+            }
+        }
+        scope:tmm_actor_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:tmm_player = {
+                    add_to_variable_list = {
+                        name = tmm_actor_maa_list
+                        target = prev
+                    }
+                }
+            }
+        }
+    }
+}
+
+##################################################################
+# DEPRECATED: V3 旧函数（保留存底，不再被窗口调用）
+##################################################################
+# tmm_window_init_all — V3 窗口初始化（已被 tmm_window_init_all_V4 替代）
+tmm_window_init_all = {
+    scope = character
+    effect = {
+        clear_variable_list = tmm_title_list
+        clear_variable_list = tmm_maa_regiments
+
+        scope:tmm_vassal = {
+            scope:actor = {
+                save_scope_value_as = {
+                    name = tmm_window_vassal_name
+                    value = prev.title
+                }
+            }
+        }
+
+        scope:tmm_vassal = {
+            every_held_title = {
+                limit = {
+                    any_owned_title_maa_regiment = { count >= 1 }
+                }
+                scope:actor = {
+                    add_to_variable_list = {
+                        name = tmm_title_list
+                        target = prev
+                    }
+                }
+                if = {
+                    limit = {
+                        NOT = { exists = scope:tmm_selected_title }
+                    }
+                    save_scope_as = tmm_selected_title
+                }
+            }
+        }
+
+        scope:tmm_selected_title = {
+            scope:actor = {
+                save_scope_value_as = {
+                    name = tmm_current_title_name
+                    value = prev.title
+                }
+            }
+        }
+
+        scope:tmm_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:actor = {
+                    add_to_variable_list = {
+                        name = tmm_maa_regiments
+                        target = prev
+                    }
+                }
+            }
+        }
+    }
+}
+
+# tmm_window_select_title — V3 标题切换（已被 tmm_v4_select_vassal_title / tmm_v4_select_actor_title 替代）
+tmm_window_select_title = {
+    scope = character
+    effect = {
+        scope:title = {
+            save_scope_as = tmm_selected_title
+        }
+
+        scope:tmm_selected_title = {
+            scope:actor = {
+                save_scope_value_as = {
+                    name = tmm_current_title_name
+                    value = prev.title
+                }
+            }
+        }
+
+        scope:actor = {
+            clear_variable_list = tmm_maa_regiments
+        }
+        scope:tmm_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:actor = {
+                    add_to_variable_list = {
+                        name = tmm_maa_regiments
+                        target = prev
+                    }
+                }
+            }
+        }
+    }
+}
+
+# tmm_window_transfer_regiment — V3 兵团转移（已被 tmm_v4_select_vassal_regiment + tmm_v4_transfer_to_player 替代）
+tmm_window_transfer_regiment = {
+    scope = character
+    effect = {
+        scope:regiment = {
+            save_temporary_scope_as = old_regiment
+        }
+
+        scope:actor = {
+            tmm_transfer_maa_up = yes
+        }
+
+        scope:actor = {
+            clear_variable_list = tmm_maa_regiments
+        }
+        scope:tmm_selected_title = {
+            every_owned_title_maa_regiment = {
+                scope:actor = {
+                    add_to_variable_list = {
+                        name = tmm_maa_regiments
+                        target = prev
+                    }
+                }
+            }
+        }
+    }
+}
+
+# tmm_window_transfer_all — V3 全部收回（已被 tmm_v4_transfer_all_to_player 替代）
+tmm_window_transfer_all = {
+    scope = character
+    effect = {
+        scope:tmm_selected_title = {
+            every_owned_title_maa_regiment = {
+                save_temporary_scope_as = old_regiment
+                scope:actor = { tmm_transfer_maa_up = yes }
+            }
+        }
+        scope:actor = {
+            clear_variable_list = tmm_maa_regiments
+        }
+    }
+}
+
+# ===================================================
+# V5.3 — 双头衔互转窗口：恢复原始选择与转移语义
+#
+# 2026-08-03 回归修复：
+# - V5.1 的鼠标命中优化有效，继续保留在 GUI 文件中。
+# - 不再依赖跨 GUI 调用的 saved scope；恢复原版 tmm_v5_fv / tmm_v5_fp
+#   头衔标记来保存左右选择并解析转移目标。
+# - 清理重复定义，只保留一套与原始窗口一致的转移实现。
+# ===================================================
+
+tmm_v5_close_window = {
+    scope = character
+    effect = {
+        remove_variable = tmm_maa_window_open
+        every_in_list = { variable = tmm_vassal_titles remove_variable = tmm_v5_fv }
+        every_in_list = { variable = tmm_player_titles remove_variable = tmm_v5_fp }
+        clear_variable_list = tmm_vassal_titles
+        clear_variable_list = tmm_player_titles
+        clear_variable_list = tmm_vassal_regiments
+        clear_variable_list = tmm_player_regiments
+        remove_variable = tmm_has_vassal_title
+        remove_variable = tmm_has_player_title
+        remove_variable = tmm_v5_vassal_title
+        remove_variable = tmm_v5_player_title
+        remove_variable = tmm_v5_vassal_name
+        remove_variable = tmm_v5_player_name
+    }
+}
+
+# --- 清除左右选择，但不关闭窗口 ---
+tmm_v5_clear_selection = {
+    scope = character
+    effect = {
+        every_in_list = {
+            variable = tmm_vassal_titles
+            limit = { has_variable = tmm_v5_fv }
+            remove_variable = tmm_v5_fv
+        }
+        every_in_list = {
+            variable = tmm_player_titles
+            limit = { has_variable = tmm_v5_fp }
+            remove_variable = tmm_v5_fp
+        }
+        clear_variable_list = tmm_vassal_regiments
+        clear_variable_list = tmm_player_regiments
+        remove_variable = tmm_has_vassal_title
+        remove_variable = tmm_has_player_title
+        remove_variable = tmm_v5_vassal_title
+        remove_variable = tmm_v5_player_title
+        remove_variable = tmm_v5_vassal_name
+        remove_variable = tmm_v5_player_name
+    }
+}
+
+# --- 选择左右头衔：沿用原始持久头衔标记语义 ---
+tmm_v5_select_vassal_title = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = _r
+        every_in_list = { variable = tmm_vassal_titles limit = { has_variable = tmm_v5_fv } remove_variable = tmm_v5_fv }
+        scope:title = { set_variable = { name = tmm_v5_fv value = flag:yes } }
+        set_variable = { name = tmm_v5_vassal_title value = scope:title }
+        set_variable = { name = tmm_has_vassal_title value = flag:yes }
+        clear_variable_list = _tmp_regiments
+        scope:title = { every_owned_title_maa_regiment = { scope:_r = { add_to_variable_list = { name = _tmp_regiments target = prev } } } }
+        clear_variable_list = tmm_vassal_regiments
+        every_in_list = { variable = _tmp_regiments scope:_r = { add_to_variable_list = { name = tmm_vassal_regiments target = prev } } }
+        clear_variable_list = _tmp_regiments
+    }
+}
+
+tmm_v5_select_player_title = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = _r
+        every_in_list = { variable = tmm_player_titles limit = { has_variable = tmm_v5_fp } remove_variable = tmm_v5_fp }
+        scope:title = { set_variable = { name = tmm_v5_fp value = flag:yes } }
+        set_variable = { name = tmm_v5_player_title value = scope:title }
+        set_variable = { name = tmm_has_player_title value = flag:yes }
+        clear_variable_list = _tmp_regiments
+        scope:title = { every_owned_title_maa_regiment = { scope:_r = { add_to_variable_list = { name = _tmp_regiments target = prev } } } }
+        clear_variable_list = tmm_player_regiments
+        every_in_list = { variable = _tmp_regiments scope:_r = { add_to_variable_list = { name = tmm_player_regiments target = prev } } }
+        clear_variable_list = _tmp_regiments
+    }
+}
+
+# --- 单兵转移：沿用原始目标解析与转移宏 ---
+tmm_v5_transfer_to_player = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = _r
+        every_in_list = { variable = tmm_player_titles limit = { has_variable = tmm_v5_fp } save_temporary_scope_as = target_title }
+        if = {
+            limit = { has_variable = tmm_has_player_title }
+            scope:regiment = { save_temporary_scope_as = old_regiment }
+            tmm_army_transfer_title_maa = yes
+        }
+        clear_variable_list = _tmp_regiments
+        every_in_list = { variable = tmm_vassal_titles limit = { has_variable = tmm_v5_fv }
+            every_owned_title_maa_regiment = { scope:_r = { add_to_variable_list = { name = _tmp_regiments target = prev } } } }
+        clear_variable_list = tmm_vassal_regiments
+        every_in_list = { variable = _tmp_regiments scope:_r = { add_to_variable_list = { name = tmm_vassal_regiments target = prev } } }
+        clear_variable_list = _tmp_regiments
+        every_in_list = { variable = tmm_player_titles limit = { has_variable = tmm_v5_fp }
+            every_owned_title_maa_regiment = { scope:_r = { add_to_variable_list = { name = _tmp_regiments target = prev } } } }
+        clear_variable_list = tmm_player_regiments
+        every_in_list = { variable = _tmp_regiments scope:_r = { add_to_variable_list = { name = tmm_player_regiments target = prev } } }
+        clear_variable_list = _tmp_regiments
+    }
+}
+
+tmm_v5_transfer_to_vassal = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = _r
+        every_in_list = { variable = tmm_vassal_titles limit = { has_variable = tmm_v5_fv } save_temporary_scope_as = target_title }
+        if = {
+            limit = { has_variable = tmm_has_vassal_title }
+            scope:regiment = { save_temporary_scope_as = old_regiment }
+            tmm_army_transfer_title_maa = yes
+        }
+        clear_variable_list = _tmp_regiments
+        every_in_list = { variable = tmm_vassal_titles limit = { has_variable = tmm_v5_fv }
+            every_owned_title_maa_regiment = { scope:_r = { add_to_variable_list = { name = _tmp_regiments target = prev } } } }
+        clear_variable_list = tmm_vassal_regiments
+        every_in_list = { variable = _tmp_regiments scope:_r = { add_to_variable_list = { name = tmm_vassal_regiments target = prev } } }
+        clear_variable_list = _tmp_regiments
+        every_in_list = { variable = tmm_player_titles limit = { has_variable = tmm_v5_fp }
+            every_owned_title_maa_regiment = { scope:_r = { add_to_variable_list = { name = _tmp_regiments target = prev } } } }
+        clear_variable_list = tmm_player_regiments
+        every_in_list = { variable = _tmp_regiments scope:_r = { add_to_variable_list = { name = tmm_player_regiments target = prev } } }
+        clear_variable_list = _tmp_regiments
+    }
+}
+
+# --- 批量转移：沿用原始目标解析与刷新语义 ---
+tmm_v5_batch_to_player = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = _r
+        every_in_list = { variable = tmm_player_titles limit = { has_variable = tmm_v5_fp } save_temporary_scope_as = target_title }
+        if = {
+            limit = { has_variable = tmm_has_player_title }
+            scope:target_title = { save_scope_as = target }
+            every_in_list = { variable = tmm_vassal_titles limit = { has_variable = tmm_v5_fv }
+                every_owned_title_maa_regiment = {
+                    save_scope_as = old_regiment
+                    scope:old_regiment = { transfer_title_maa = scope:target }
+                    scope:_r = { tmm_transfer_maa_down = yes }
+                }
+            }
+        }
+        clear_variable_list = _tmp_regiments
+        every_in_list = { variable = tmm_vassal_titles limit = { has_variable = tmm_v5_fv }
+            every_owned_title_maa_regiment = { scope:_r = { add_to_variable_list = { name = _tmp_regiments target = prev } } } }
+        clear_variable_list = tmm_vassal_regiments
+        every_in_list = { variable = _tmp_regiments scope:_r = { add_to_variable_list = { name = tmm_vassal_regiments target = prev } } }
+        clear_variable_list = _tmp_regiments
+        every_in_list = { variable = tmm_player_titles limit = { has_variable = tmm_v5_fp }
+            every_owned_title_maa_regiment = { scope:_r = { add_to_variable_list = { name = _tmp_regiments target = prev } } } }
+        clear_variable_list = tmm_player_regiments
+        every_in_list = { variable = _tmp_regiments scope:_r = { add_to_variable_list = { name = tmm_player_regiments target = prev } } }
+        clear_variable_list = _tmp_regiments
+    }
+}
+
+tmm_v5_batch_to_vassal = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = _r
+        every_in_list = { variable = tmm_vassal_titles limit = { has_variable = tmm_v5_fv } save_temporary_scope_as = target_title }
+        if = {
+            limit = { has_variable = tmm_has_vassal_title }
+            scope:target_title = { save_scope_as = target }
+            every_in_list = { variable = tmm_player_titles limit = { has_variable = tmm_v5_fp }
+                every_owned_title_maa_regiment = {
+                    save_scope_as = old_regiment
+                    scope:old_regiment = { transfer_title_maa = scope:target }
+                    scope:_r = { tmm_transfer_maa_down = yes }
+                }
+            }
+        }
+        clear_variable_list = _tmp_regiments
+        every_in_list = { variable = tmm_vassal_titles limit = { has_variable = tmm_v5_fv }
+            every_owned_title_maa_regiment = { scope:_r = { add_to_variable_list = { name = _tmp_regiments target = prev } } } }
+        clear_variable_list = tmm_vassal_regiments
+        every_in_list = { variable = _tmp_regiments scope:_r = { add_to_variable_list = { name = tmm_vassal_regiments target = prev } } }
+        clear_variable_list = _tmp_regiments
+        every_in_list = { variable = tmm_player_titles limit = { has_variable = tmm_v5_fp }
+            every_owned_title_maa_regiment = { scope:_r = { add_to_variable_list = { name = _tmp_regiments target = prev } } } }
+        clear_variable_list = tmm_player_regiments
+        every_in_list = { variable = _tmp_regiments scope:_r = { add_to_variable_list = { name = tmm_player_regiments target = prev } } }
+        clear_variable_list = _tmp_regiments
+    }
+}
+
+# === 十四、PT 窗口（个人头衔兵士互转）===
+
+tmm_pt_window_init = {
+    scope = character
+    effect = {
+        # 0. 保存 root 引用
+        save_temporary_scope_as = _r
+
+        # 1. 清空所有旧状态
+        every_in_list = { variable = tmm_pt_title_list remove_variable = tmm_pt_fv }
+        clear_variable_list = tmm_pt_title_list
+        clear_variable_list = tmm_pt_personal_list
+        clear_variable_list = tmm_pt_regiment_list
+        clear_variable_list = _tmp_regiments
+        remove_variable = tmm_pt_selected_title
+        remove_variable = tmm_pt_selected_name
+        remove_variable = tmm_pt_has_title
+        remove_variable = tmm_pt_has_personal
+
+        # 2. 填充个人兵团列表（不属于任何头衔的兵团）
+        clear_variable_list = _tmp_regiments
+        every_maa_regiment = {
+            limit = { is_title_maa_regiment = no }
+            scope:_r = {
+                add_to_variable_list = { name = _tmp_regiments target = prev }
+            }
+        }
+        every_in_list = {
+            variable = _tmp_regiments
+            scope:_r = {
+                add_to_variable_list = { name = tmm_pt_personal_list target = prev }
+            }
+        }
+        clear_variable_list = _tmp_regiments
+
+        # 2b. 设置 has_personal flag
+        if = {
+            limit = {
+                any_maa_regiment = { is_title_maa_regiment = no }
+            }
+            set_variable = { name = tmm_pt_has_personal value = flag:yes }
+        }
+
+        # 3. 填充头衔列表（仅包含有兵团的头衔）
+        every_held_title = {
+            limit = {
+                any_owned_title_maa_regiment = { count >= 1 }
+            }
+            scope:_r = {
+                add_to_variable_list = {
+                    name = tmm_pt_title_list
+                    target = prev
+                }
+            }
+        }
+
+        # 4. 打开窗口
+        set_variable = { name = tmm_pt_window_open value = flag:yes }
+    }
+}
+
+tmm_pt_transfer_to_title = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = _r
+
+        # 1. 转移私兵到选中头衔（从列表找标记项获取头衔 scope）
+        if = {
+            limit = { has_variable = tmm_pt_has_title }
+            scope:regiment = {
+                save_temporary_scope_as = old_regiment
+            }
+            every_in_list = {
+                variable = tmm_pt_title_list
+                limit = { has_variable = tmm_pt_fv }
+                save_temporary_scope_as = target_title
+            }
+            tmm_army_transfer_title_maa = yes
+        }
+
+        # 2. 刷新个人兵团列表
+        clear_variable_list = _tmp_regiments
+        every_maa_regiment = {
+            limit = { is_title_maa_regiment = no }
+            scope:_r = {
+                add_to_variable_list = { name = _tmp_regiments target = prev }
+            }
+        }
+        clear_variable_list = tmm_pt_personal_list
+        every_in_list = {
+            variable = _tmp_regiments
+            scope:_r = {
+                add_to_variable_list = { name = tmm_pt_personal_list target = prev }
+            }
+        }
+        clear_variable_list = _tmp_regiments
+
+        # 2b. 更新 has_personal flag
+        if = {
+            limit = {
+                any_maa_regiment = { is_title_maa_regiment = no }
+            }
+            set_variable = { name = tmm_pt_has_personal value = flag:yes }
+        }
+        else = {
+            remove_variable = tmm_pt_has_personal
+        }
+
+        # 3. 右侧面板从 GetPlayer.GetTitles 自动刷新，无需手动填充列表
+    }
+}
+
+tmm_pt_transfer_to_personal = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = _r
+
+        # 1. 设置转移参数并执行私有化
+        if = {
+            limit = { has_variable = tmm_pt_has_title }
+            scope:regiment = {
+                save_temporary_scope_as = old_regiment
+            }
+            tmm_privatize_maa = yes
+        }
+
+        # 2. 刷新个人兵团列表
+        clear_variable_list = _tmp_regiments
+        every_maa_regiment = {
+            limit = { is_title_maa_regiment = no }
+            scope:_r = {
+                add_to_variable_list = { name = _tmp_regiments target = prev }
+            }
+        }
+        clear_variable_list = tmm_pt_personal_list
+        every_in_list = {
+            variable = _tmp_regiments
+            scope:_r = {
+                add_to_variable_list = { name = tmm_pt_personal_list target = prev }
+            }
+        }
+        clear_variable_list = _tmp_regiments
+
+        # 2b. 更新 has_personal flag
+        if = {
+            limit = {
+                any_maa_regiment = { is_title_maa_regiment = no }
+            }
+            set_variable = { name = tmm_pt_has_personal value = flag:yes }
+        }
+        else = {
+            remove_variable = tmm_pt_has_personal
+        }
+
+        # 3. 右侧面板从 GetPlayer.GetTitles 自动刷新，无需手动填充列表
+    }
+}
+
+tmm_pt_clear_selection = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = _r
+
+        # 清除选中标记
+        every_in_list = {
+            variable = tmm_pt_title_list
+            limit = { has_variable = tmm_pt_fv }
+            remove_variable = tmm_pt_fv
+        }
+
+        # 清除持久化 scope
+        remove_variable = tmm_pt_selected_name
+        remove_variable = tmm_pt_has_title
+
+        # 清空兵团列表
+        clear_variable_list = tmm_pt_regiment_list
+    }
+}
+
+tmm_pt_close_window = {
+    scope = character
+    effect = {
+        # 关闭窗口
+        remove_variable = tmm_pt_window_open
+
+        # 清除每个头衔上的选中标记
+        every_in_list = {
+            variable = tmm_pt_title_list
+            remove_variable = tmm_pt_fv
+        }
+
+        # 清空所有列表
+        clear_variable_list = tmm_pt_title_list
+        clear_variable_list = tmm_pt_personal_list
+        clear_variable_list = tmm_pt_regiment_list
+        clear_variable_list = _tmp_regiments
+
+        # 清除所有 flag 和 scope 变量
+        remove_variable = tmm_pt_selected_title
+        remove_variable = tmm_pt_selected_name
+        remove_variable = tmm_pt_has_title
+        remove_variable = tmm_pt_has_personal
+    }
+}
+
+# === 十五、PT 窗口 — 选中头衔（saved_scopes 模式）===
+
+tmm_pt_select_title = {
+    scope = character
+    effect = {
+        save_temporary_scope_as = _r
+        every_in_list = { variable = tmm_pt_title_list limit = { has_variable = tmm_pt_fv } remove_variable = tmm_pt_fv }
+        scope:title = {
+            set_variable = { name = tmm_pt_fv value = flag:yes }
+            scope:_r = {
+                set_variable = { name = tmm_pt_selected_title value = scope:title }
+            }
+        }
+        set_variable = { name = tmm_pt_has_title value = flag:yes }
+    }
+}

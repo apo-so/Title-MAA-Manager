@@ -1,0 +1,465 @@
+# ===================================================
+# 功能：裁撤冗兵（彻底修复误杀漏洞与性能补丁版）
+# 说明：通过send_option选兵种，直接销毁封臣目标头衔上的头衔兵士
+# ===================================================
+tmm_disband_vassal_interaction = { 
+	category = interaction_category_diplomacy
+	target_type = title
+	target_filter = recipient_domain_titles
+	icon = request_maa_interaction
+	interface_priority = 100
+	common_interaction = no
+	desc = tmm_disband_vassal_interaction_desc
+	auto_accept = yes
+	
+	# --- 一、交互是否显示 ---
+	is_shown = {
+		scope:recipient = {
+			any_held_title = { any_owned_title_maa_regiment = { count >= 1 } }
+			is_vassal_or_below_of = scope:actor
+			NOT = { scope:actor = scope:recipient }
+		}
+		scope:actor = {
+			is_ai = no
+		}
+	}
+
+	# --- 二、目标有效性提示与可选限制 ---
+	has_valid_target_showing_failures_only = {
+		scope:target = {
+			tier = tier_duchy
+			any_owned_title_maa_regiment = { count >= 1 }
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:recipient = {
+			NOT = { is_at_war_with = scope:actor }
+			NOT = { has_trait = devoted } 
+		}
+	}
+
+	can_be_picked_title = {
+		scope:target = {
+			is_leased_out = no
+			tier = tier_duchy
+			any_owned_title_maa_regiment = { count >= 1 }
+		}
+	}
+	
+	# =====================================================
+	# 三、选项区：根据封臣目标头衔兵力动态显示可选裁撤项
+	# =====================================================
+
+	# 全部军团
+	send_option = {
+		flag = all_title_maa
+		localization = all_title_maa
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { count >= 1 } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 散兵
+	send_option = {
+		flag = skirmishers
+		localization = skirmishers
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = skirmishers } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 弓箭手
+	send_option = {
+		flag = archers
+		localization = archers
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = archers } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 重步兵
+	send_option = {
+		flag = heavy_infantry
+		localization = heavy_infantry
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = heavy_infantry } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 重骑兵
+	send_option = {
+		flag = heavy_cavalry
+		localization = heavy_cavalry
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = heavy_cavalry } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 轻骑兵
+	send_option = {
+		flag = light_cavalry
+		localization = light_cavalry
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = light_cavalry } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 长枪兵
+	send_option = {
+		flag = pikemen
+		localization = pikemen
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = pikemen } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 攻城武器
+	send_option = {
+		flag = siege_weapon
+		localization = siege_weapon
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = siege_weapon } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+	
+	# 骆驼骑兵
+	send_option = {
+		flag = camel_cavalry
+		localization = camel_cavalry
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = camel_cavalry } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 战象骑兵
+	send_option = {
+		flag = elephant_cavalry
+		localization = elephant_cavalry
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = elephant_cavalry } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 骑射手
+	send_option = {
+		flag = archer_cavalry
+		localization = archer_cavalry
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = archer_cavalry } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 火药部队
+	send_option = {
+		flag = gunpowder
+		localization = gunpowder
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = gunpowder } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 游牧部队
+	send_option = {
+		flag = nomadic_horde
+		localization = nomadic_horde
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = { any_owned_title_maa_regiment = { is_unit_type = nomadic_horde } }
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# 其他特殊兵种
+	send_option = {
+		flag = other_type
+		localization = other_type
+		is_shown = {
+			trigger_if = {
+				limit = { exists = scope:target }
+				scope:target = {
+					any_owned_title_maa_regiment = { 
+						NOR = {
+							is_unit_type = skirmishers
+							is_unit_type = heavy_cavalry
+							is_unit_type = pikemen
+							is_unit_type = heavy_infantry
+							is_unit_type = siege_weapon
+							is_unit_type = archers
+							is_unit_type = light_cavalry
+							is_unit_type = camel_cavalry
+							is_unit_type = elephant_cavalry
+							is_unit_type = archer_cavalry
+							is_unit_type = gunpowder
+							is_unit_type = nomadic_horde
+						}	
+					}
+				}
+			}
+			trigger_else = { always = no }
+		}
+	}
+
+	# =====================================================
+	# 四、执行逻辑结算区（直接定点消除物理实体）
+	# =====================================================
+	on_accept = {
+
+		# --- 1. 批量裁撤：一键摧毁全部头衔常备 ---
+		if = {
+			limit = { scope:all_title_maa = yes }
+			scope:target = {
+				every_owned_title_maa_regiment = {
+					destroy_maa_regiment = yes
+				}
+			}
+		}
+
+		# --- 2. 轻骑兵 ---
+		if = {
+			limit = {
+				scope:light_cavalry = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = light_cavalry }
+					destroy_maa_regiment = yes
+				}
+			}
+		}
+
+		# --- 3. 长枪兵 ---
+		if = {
+			limit = {
+				scope:pikemen = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = pikemen }
+					destroy_maa_regiment = yes
+				}
+			}
+		}
+
+		# --- 4. 散兵 ---
+		if = {
+			limit = {
+				scope:skirmishers = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = skirmishers }
+					destroy_maa_regiment = yes
+				}
+			}
+		}
+
+		# --- 5. 重步兵 ---
+		if = {
+			limit = {
+				scope:heavy_infantry = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = heavy_infantry }
+					destroy_maa_regiment = yes
+				}
+			}
+		}
+
+		# --- 6. 重骑兵 ---
+		if = {
+			limit = {
+				scope:heavy_cavalry = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = heavy_cavalry }
+					destroy_maa_regiment = yes
+				}
+			}
+		}
+
+		# --- 7. 弓箭手 ---
+		if = {
+			limit = {
+				scope:archers = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = archers }
+					destroy_maa_regiment = yes
+				}
+			}
+		}
+
+		# --- 8. 攻城武器 ---
+		if = {
+			limit = {
+				scope:siege_weapon = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = siege_weapon }
+					destroy_maa_regiment = yes
+				}
+			}
+		}
+		
+		# --- 9. 骆驼骑兵 ---
+		if = {
+			limit = {
+				scope:camel_cavalry = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = camel_cavalry }
+					destroy_maa_regiment = yes
+				}
+			}
+		}
+
+		# --- 10. 战象骑兵 ---
+		if = {
+			limit = {
+				scope:elephant_cavalry = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = elephant_cavalry }
+					destroy_maa_regiment = yes
+				}
+			}
+		}
+
+		# --- 11. 骑射手 ---
+		if = {
+			limit = {
+				scope:archer_cavalry = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = archer_cavalry }
+					destroy_maa_regiment = yes
+				}
+			}
+		}
+
+		# --- 12. 火药部队 ---
+		if = {
+			limit = {
+				scope:gunpowder = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = gunpowder }
+					destroy_maa_regiment = yes
+				}
+			}
+		}
+
+		# --- 13. 游牧部队 ---
+		if = {
+			limit = {
+				scope:nomadic_horde = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = { is_unit_type = nomadic_horde }
+					destroy_maa_regiment = yes
+				}
+			}
+		}
+
+		# --- 14. 其他未知特色兵种（补齐了缺少的 5 大核心兵种排除过滤器） ---
+		if = {
+			limit = {
+				scope:other_type = yes
+				NOT = { scope:all_title_maa = yes }
+			}
+			scope:target = {
+				random_owned_title_maa_regiment = {
+					limit = {
+						NOR = {
+							is_unit_type = skirmishers
+							is_unit_type = heavy_cavalry
+							is_unit_type = pikemen
+							is_unit_type = heavy_infantry
+							is_unit_type = siege_weapon
+							is_unit_type = archers
+							is_unit_type = light_cavalry
+							is_unit_type = camel_cavalry
+							is_unit_type = elephant_cavalry
+							is_unit_type = archer_cavalry
+							is_unit_type = gunpowder
+							is_unit_type = nomadic_horde
+						}
+					}
+					destroy_maa_regiment = yes
+				}
+			}
+		}
+	}
+}

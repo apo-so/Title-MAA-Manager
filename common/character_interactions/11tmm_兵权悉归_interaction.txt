@@ -1,0 +1,76 @@
+# ===================================================
+# 功能：兵权悉归 — 收回目标封臣及其所有下级封臣的全部头衔兵士
+# 说明：一键将目标封臣及其麾下所有封臣持有的头衔兵士集中至actor主头衔
+# ===================================================
+tmm_revoke_vassal_tree_interaction = {
+	category = interaction_category_diplomacy
+	interface_priority = 180
+	common_interaction = yes
+	icon = request_maa_interaction
+
+	desc = tmm_revoke_vassal_tree_interaction_desc
+
+	ai_maybe = no
+	auto_accept = yes
+	use_diplomatic_range = no
+	ignores_pending_interaction_block = yes
+
+	is_shown = {
+		scope:actor = {
+			is_ai = no
+		}
+
+		scope:recipient = {
+			is_alive = yes
+			NOT = { this = scope:actor }
+			is_vassal_or_below_of = scope:actor
+		}
+	}
+
+	is_valid = {
+		scope:recipient = {
+			is_alive = yes
+			NOT = { this = scope:actor }
+			is_vassal_or_below_of = scope:actor
+
+			OR = {
+				any_held_title = {
+					any_owned_title_maa_regiment = {
+						is_title_maa_regiment = yes
+					}
+				}
+				any_vassal_or_below = {
+					any_held_title = {
+						any_owned_title_maa_regiment = {
+							is_title_maa_regiment = yes
+						}
+					}
+				}
+			}
+		}
+	}
+
+	on_accept = {
+		scope:actor = {
+			save_scope_as = tmm_maa_receiver
+		}
+
+		scope:recipient = {
+			# 先收回目标封臣本人所有头衔的头衔兵士
+			tmm_revoke_all_maa_from_character = yes
+
+			# 再收回目标封臣所有下级封臣的头衔兵士
+			every_vassal_or_below = {
+				tmm_revoke_all_maa_from_character = yes
+			}
+		}
+	}
+
+	ai_accept = {
+		base = 100
+	}
+
+	ai_will_do = {
+		base = 0
+	}
+}

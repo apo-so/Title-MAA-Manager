@@ -1,0 +1,73 @@
+# ===================================================
+# 功能：指派头衔兵权给封臣（简化版）
+# 说明：玩家从自己的头衔兵池中选择一支兵团，指派到指定封臣的主头衔下。使用 men_at_arms 目标类型，无需选兵种。
+# ===================================================
+tmm_deploy_maa_to_vassal_interaction = {
+
+	# --- 基础交互设置 ---
+	category = interaction_category_diplomacy
+	target_type = men_at_arms
+	target_filter = actor_title_maa
+	icon = request_maa_interaction
+	common_interaction = no
+	interface_priority = 105
+	desc = tmm_deploy_maa_to_vassal_interaction_desc
+	auto_accept = yes
+	ai_frequency = 0
+
+	# --- 可用条件 ---
+	is_available = { always = yes }
+
+	# --- 交互是否显示 ---
+	is_shown = {
+		NOT = { scope:actor = scope:recipient }
+
+		scope:recipient = {
+			is_vassal_or_below_of = scope:actor
+		}
+
+		scope:actor = {
+			is_ai = no
+			primary_title = {
+				any_owned_title_maa_regiment = {
+					count >= 1
+				}
+			}
+		}
+	}
+
+	# --- 目标有效性提示 ---
+	has_valid_target_showing_failures_only = {
+		scope:target = {
+			is_title_maa_regiment = yes
+		}
+	}
+
+	# --- 有效性 ---
+	is_valid_showing_failures_only = {
+		scope:recipient = {
+			NOT = { is_at_war_with = scope:actor }
+		}
+	}
+
+	# --- 执行 ---
+	on_accept = {
+		# 1. 将封臣的主头衔保存为 target_title
+		scope:recipient = {
+			primary_title = {
+				save_temporary_scope_as = target_title
+			}
+		}
+
+		# 2. 将选中的兵士转移至封臣主头衔（先改归属，再清洗重建）
+		scope:target = {
+			transfer_title_maa = scope:target_title
+			save_temporary_scope_as = old_regiment
+		}
+
+		# 3. 执行清洗重建转移（创建副本 → 复制规模 → 销毁原兵团）
+		scope:actor = {
+			tmm_army_transfer_title_maa = yes
+		}
+	}
+}

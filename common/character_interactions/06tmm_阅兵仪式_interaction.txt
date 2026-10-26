@@ -1,0 +1,56 @@
+# ===================================================
+# 功能：阅兵仪式 — 查看并接管头衔下的常备军
+# 说明：选择目标头衔，将其非个人常备军转移至actor主头衔，用于检阅兵力
+# ===================================================
+tmm_inspect_maa_interaction = {
+	category = interaction_category_diplomacy
+	# 【核心机制】
+	# 设置为 title 后，点击按钮不会直接执行，而是先弹出"选择头衔"的列表
+	target_type = title
+	# 列表里显示谁的头衔？显示接收者(recipient)的。
+	# 如果是点自己，就显示自己的头衔列表。
+	target_filter = recipient_domain_titles
+	
+	icon = request_maa_interaction
+	
+	# 必须为 no，这样选完头衔后才会弹出确认框让你看兵种
+	auto_accept = no
+
+	# 按钮说明
+	desc = tmm_inspect_maa_interaction_desc
+
+	# --- 1. 显示条件 ---
+	is_shown = {	}
+
+	# --- 2. 只有选中的那个头衔下确实有兵，才允许点确定 ---
+	# （在头衔列表里，没兵的头衔通常也能点，但点了之后如果是灰的或没反应，可以用这个过滤）
+	has_valid_target_showing_failures_only = {
+		scope:target = {
+			any_owned_title_maa_regiment = { count >= 1 }
+		}
+	}
+
+	# --- 3. 核心逻辑 ---
+	on_accept = {
+		# scope:target 就是您刚才在列表里"指定的那个头衔"
+		scope:target = {
+			every_owned_title_maa_regiment = {
+				limit = { is_personal_maa_regiment = no }
+				
+				# 执行转移：将它们全部转到您的【主头衔】(primary_title) 下
+				# 系统会在确认框里自动生成一行文字："将 [兵士名] 转移给 [您的主头衔]"
+				# 这既起到了预览明细的作用，也起到了实际转移的作用
+				transfer_title_maa = scope:actor.primary_title
+			}
+		}
+		
+		# （可选）操作完成后给个提示
+		scope:actor = {
+			send_interface_toast = {
+				title = "CONSOLIDATE_MAA_DONE_TITLE"
+				left_icon = scope:target
+				custom_tooltip = "CONSOLIDATE_MAA_DONE_DESC"
+			}
+		}
+	}
+}
