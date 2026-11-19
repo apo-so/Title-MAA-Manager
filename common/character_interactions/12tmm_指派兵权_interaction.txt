@@ -1,4 +1,4 @@
-# ===================================================
+﻿# ===================================================
 # 功能：指派头衔兵权给封臣（简化版）
 # 说明：玩家从自己的头衔兵池中选择一支兵团，指派到指定封臣的主头衔下。使用 men_at_arms 目标类型，无需选兵种。
 # ===================================================
@@ -20,6 +20,7 @@ tmm_deploy_maa_to_vassal_interaction = {
 
 	# --- 交互是否显示 ---
 	is_shown = {
+        scope:actor = { has_variable = tmm_reserve_interactions_open }
 		NOT = { scope:actor = scope:recipient }
 
 		scope:recipient = {

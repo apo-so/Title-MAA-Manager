@@ -1,4 +1,4 @@
-# ===================================================
+﻿# ===================================================
 # 功能：头衔兵士转移宏（向下部署 / 向上收回）
 # 说明：通过清洗重建（create→copy size→destroy）实现兵士在不同头衔间的安全转移
 # ===================================================
@@ -15,7 +15,7 @@ tmm_transfer_maa_down = {
             type_of = scope:old_regiment
             check_can_recruit = no
             title = scope:target
-            size = 200
+            size = 200 # 规模 200 专用于本次转移的新团；正常兵团不会同规模，后面的 maa_size = 200 唯一匹配该团。
         }
 
         # 2. 找到刚刚创建的那支目标头衔兵士
@@ -58,7 +58,7 @@ tmm_transfer_maa_up = {
             type_of = scope:old_regiment
             check_can_recruit = no
             title = scope:actor.primary_title
-            size = 200
+            size = 200 # 规模 200 专用于本次转移的新团；正常兵团不会同规模，后面的 maa_size = 200 唯一匹配该团。
         }
 
         # 2. 找到刚刚创建的那支首都头衔兵士
@@ -100,7 +100,7 @@ tmm_army_transfer_title_maa = {
             type_of = scope:old_regiment
             check_can_recruit = no
             title = scope:target_title
-            size = 200
+            size = 200 # 规模 200 专用于本次转移的新团；正常兵团不会同规模，后面的 maa_size = 200 唯一匹配该团。
         }
 
         # 2. 找到刚刚创建的那支目标头衔兵士
@@ -138,7 +138,7 @@ owned_army_transfer_title_maa = {
             type_of = scope:old_regiment
             check_can_recruit = no
             title = scope:target_title
-            size = 200
+            size = 200 # 规模 200 专用于本次转移的新团；正常兵团不会同规模，后面的 maa_size = 200 唯一匹配该团。
         }
         scope:target_title = {
             random_title_maa_regiment = {

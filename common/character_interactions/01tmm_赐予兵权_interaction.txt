@@ -1,4 +1,4 @@
-# ===================================================
+﻿# ===================================================
 # 功能：将首都头衔兵/兵士下放给封臣的某个直属头衔（绝对流向同步版）
 # 说明：通过send_option选兵种，批量或逐个将首都头衔兵转移至封臣目标头衔
 # ===================================================
@@ -17,6 +17,7 @@ tmm_deploy_to_vassal_interaction = {
 
 	# --- 交互是否显示 ---
 	is_shown = {
+        scope:actor = { has_variable = tmm_reserve_interactions_open }
 		NOT = { scope:actor = scope:recipient }
 
 		scope:recipient = {

@@ -1,0 +1,8 @@
+﻿# Relocate only from the recorded payer to a title still held by the player.
+tmm_recruit_context_valid_trigger = {
+    has_variable = tmm_recruit_request_v2
+    exists = var:tmm_recruit_source
+    exists = var:tmm_recruit_target
+    var:tmm_recruit_source = { holder = root }
+    var:tmm_recruit_target = { holder = root }
+}

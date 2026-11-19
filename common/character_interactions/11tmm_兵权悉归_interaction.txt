@@ -1,4 +1,4 @@
-# ===================================================
+﻿# ===================================================
 # 功能：兵权悉归 — 收回目标封臣及其所有下级封臣的全部头衔兵士
 # 说明：一键将目标封臣及其麾下所有封臣持有的头衔兵士集中至actor主头衔
 # ===================================================
@@ -16,6 +16,7 @@ tmm_revoke_vassal_tree_interaction = {
 	ignores_pending_interaction_block = yes
 
 	is_shown = {
+        scope:actor = { has_variable = tmm_reserve_interactions_open }
 		scope:actor = {
 			is_ai = no
 		}

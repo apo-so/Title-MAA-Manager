@@ -1,0 +1,285 @@
+{
+  "schema_version": 2,
+  "project": "Title-MAA-Manager",
+  "source_snapshot": "2026.11.19.15",
+  "steam_item": "3636472421",
+  "steam_manifest": "5265670677652194035",
+  "files": [
+    {
+      "path": "common/character_interactions/01tmm_赐予兵权_interaction.txt",
+      "bytes": 10985,
+      "sha256": "b8d3e1e6fc2292034197b28636e835f58f6ddeea6c86a1bb7ddfdb0304a0bc6e",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/02tmm_收回兵权_interaction.txt",
+      "bytes": 12340,
+      "sha256": "6a12f55cfcfd3aa39f2b765250b43d4ea7e5e5fb947bdc1c6c366c23ae957368",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/03tmm_集结地方_interaction.txt",
+      "bytes": 12181,
+      "sha256": "8b79f9a78265d6598090d6b352ca0d4f0ac780f5a3499f0dd7d9f84ad17163d1",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/04tmm_驻防地方_interaction.txt",
+      "bytes": 10869,
+      "sha256": "76881afadcd0925285a8cb925b9cbbad3d3a91c9ca22b12e79ed89caf186bcf2",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/05tmm_裁撤冗兵_interaction.txt",
+      "bytes": 10420,
+      "sha256": "cb4f39b6cbf14cc446d2bd9ae8493c1eaa77f5867e57447fee5a72fd63f3136d",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/06tmm_阅兵仪式_interaction.txt",
+      "bytes": 2012,
+      "sha256": "ec22fcf060c23f8e13c046fb1020febef6b229784faa6d3c0646a816386987c6",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/07tmm_#U501f#U5175_interaction.txt",
+      "bytes": 1487,
+      "sha256": "15d7e8127f013ee29ea14df268b401d4a16ec6811ff09bf8170867cc7ed527ca",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/08tmm_军队私有化_interaction.txt",
+      "bytes": 1171,
+      "sha256": "d88643f20c610f644ec5c76d97415b361b0a72ec4f9ac22f00e9e814e90c8f3d",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/09tmm_吃皇粮_interaction.txt",
+      "bytes": 1595,
+      "sha256": "187145361595aad69ff3f65ddfe9a5ab9d698fc9e1062cd03acc7a1de91f0ca8",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/10tmm_下级移隶_interaction.txt",
+      "bytes": 2436,
+      "sha256": "8e969bcc8248694ce6a63c8c3a2c6a0e226ee69f961e50ec691c92d3e773c8b7",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/11tmm_兵权悉归_interaction.txt",
+      "bytes": 1677,
+      "sha256": "a66e0ed419cf92e1cca78c191a3ea4d6ea34b3884cc4aaa0dda91d5bbb2a9405",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/12tmm_指派兵权_interaction.txt",
+      "bytes": 1865,
+      "sha256": "9c8f3db7aa3b9b00433ebb8af7ab512ca73e18819fec20949ab198320520aa1a",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/13tmm_收集封臣兵权_interaction.txt",
+      "bytes": 1913,
+      "sha256": "867a6d3cfce9e1a40c03e80a2f335192ec6c875f9d78700b4b2128f41cbc3873",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/14tmm_#U8f6c#U79fb#U5934#U8854#U5175#U58eb_interaction.txt",
+      "bytes": 1443,
+      "sha256": "4280369411a696737f512dd4beae7e89982bba12af93d7c160a45d560f38830a",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/15tmm_#U8f6c#U79fb#U5934#U8854#U5175#U58eb_#U81ea#U5df1_interaction.txt",
+      "bytes": 1046,
+      "sha256": "c2f9a4e564249318ffa412d0b733598f60add4f5711dadba949be74278d365c8",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/15tmm_个人头衔兵士互转_interaction.txt",
+      "bytes": 1555,
+      "sha256": "fdc6fd577d534933e87d533e78ab2aa9f6600731038be5b09c2c623906e3101a",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/tmm_province_interaction.txt",
+      "bytes": 1231,
+      "sha256": "06b1a39e525885d3f4c015ebeb90f7f188fcb745f26d16a3da0a8a8decd86c6e",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/character_interactions/tmm_reserve_menu.txt",
+      "bytes": 1331,
+      "sha256": "77b11e572e4b73b0794865e43314f29e1c03353ded4975f72ea97ace0a3957cd",
+      "bom": true,
+      "crlf": 44
+    },
+    {
+      "path": "common/decisions/01tmm_收天下兵_decisions.txt",
+      "bytes": 1051,
+      "sha256": "401596f78a71c019e5ca55ff2216544c7b5dd9bcc7c3de2b5c7b1eed1f2da922",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_effects/01tmm_转移宏_effects.txt",
+      "bytes": 5817,
+      "sha256": "d405c5e12dc79fecd4a65384cecc7ee68c002672d6fdab1ac6520afb09146153",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_effects/02tmm_私有化宏_effect.txt",
+      "bytes": 965,
+      "sha256": "472f15d7fc779520d8db0b693836365823205493cc5b12650ea87de654aff59b",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_effects/03tmm_收回宏_effects.txt",
+      "bytes": 1980,
+      "sha256": "e1e42090621ff09d43727294c892a049e7e9e184cc2e38fac84fa0212d9a70a1",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_effects/04tmm_v5_window_refresh_effects.txt",
+      "bytes": 4339,
+      "sha256": "5beb6c3f0be0db698ca499a83ce5313cf00663bd8ef86d2c27634ed1bd4e152e",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_effects/tmm_manager_effects.txt",
+      "bytes": 10029,
+      "sha256": "290c9e2a5718b22666ed40c218a4f20f80ed825c6d1a6166be72b2434349b558",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_effects/tmm_province_effects.txt",
+      "bytes": 2807,
+      "sha256": "e8b6d63d077da07aa303ab15d798e06672442925028ad77351ee4316cada576d",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_effects/tmm_recruit_effects.txt",
+      "bytes": 2666,
+      "sha256": "363081a82974446d49d405de111ef6196c05d995cf81271d7d2abf5c230b6b2a",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_guis/01tmm_GUI#U89e6#U53d1_guis.txt",
+      "bytes": 35273,
+      "sha256": "413df7fb0046ab461e8eb3e3dc7fef65b86f7dfb1fe2565ed374afbcc80a2d80",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_guis/tmm_manager_guis.txt",
+      "bytes": 1018,
+      "sha256": "8d6525c1d74b7981c04571e85b750be51ee9ee58b6e7cdf59723a05a0db51cd1",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_guis/tmm_recruit_guis.txt",
+      "bytes": 1532,
+      "sha256": "3739d5985af742163932f0d3cacf930c4e453c9e4e239e1ce3a2108d3b4e9af7",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "common/scripted_triggers/tmm_province_triggers.txt",
+      "bytes": 328,
+      "sha256": "f1ba176aa51c0bf567011b383bff0ddd538be5e904509ac8d3c9de7cf8e3048e",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "descriptor.mod",
+      "bytes": 163,
+      "sha256": "da2341b2db2b7ccc9c6582345365662e2ceeee51abd5fd4cd85f54051dda211c",
+      "bom": false,
+      "crlf": 0
+    },
+    {
+      "path": "events/01tmm_下级移隶_events.txt",
+      "bytes": 5428,
+      "sha256": "e38b73e87497ddebe226980ff0bfec7dfbfd9778d21ab0c11bc7afdc05b94cd2",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "events/02tmm_头衔选兵_events.txt",
+      "bytes": 8816,
+      "sha256": "d317e6536adf3273503f6c6a1e1a76db53bea7949e5435bbba510cd41db66a87",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "gui/scripted_widgets/01tmm_scripted_windows.txt",
+      "bytes": 106,
+      "sha256": "72f66ea172803b3c6d113bc6f567a91efb520ffd0bdef009f08014611d72e346",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "gui/tmm_province_window.gui",
+      "bytes": 48213,
+      "sha256": "49c2202f5cbcc56851e3db90331ed7a17ca9bc02a660956c772f667ada9746cb",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "localization/simp_chinese/01tmm_龙文本_l_simp_chinese.yml",
+      "bytes": 1421,
+      "sha256": "82177c607657b50b561723436c03e61ad88a3a3dda515895a9e3f95bfe98ee5c",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "localization/simp_chinese/02tmm_核心文本_l_simp_chinese.yml",
+      "bytes": 10750,
+      "sha256": "76880b1128de5e1b8bc0d56fb45038bd8f579e19a630da0c6d1b42656687144d",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "localization/simp_chinese/tmm_compat_l_simp_chinese.yml",
+      "bytes": 2777,
+      "sha256": "b304f37fb310b4dee81fbab0981b7cac7b34d569c65c020160030e1c42d4ed2b",
+      "bom": true,
+      "crlf": 0
+    },
+    {
+      "path": "thumbnail.png",
+      "bytes": 135740,
+      "sha256": "8a03faf8ae37446361b0a98d082fb7b37275875cb8990642aa079ebc1aa79ac8",
+      "binary": true
+    }
+  ],
+  "forbidden_overrides": [
+    "gui/window_military.gui",
+    "gui/window_menatarms_type_view.gui"
+  ]
+}

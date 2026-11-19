@@ -1,4 +1,4 @@
-# ===================================================
+﻿# ===================================================
 # 功能：头衔选兵事件（实验版：三选联动）— 从指定头衔的兵团中精准选一支收回
 # 说明：immediate 块遍历 scope:tmm_selected_title 的 every_owned_title_maa_regiment，
 #       用 if/else_if 链保存最多 12 个 scope（selected_maa_1 到 selected_maa_12）；

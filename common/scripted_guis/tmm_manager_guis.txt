@@ -1,0 +1,48 @@
+﻿tmm_manager_tab_overview = {
+    scope = character
+    is_valid = {
+        OR = {
+            NOT = { has_variable = tmm_maa_window_open }
+            NOT = { exists = var:tmm_manager_dual_recipient }
+            this = var:tmm_manager_dual_recipient
+        }
+    }
+    effect = {
+        tmm_manager_open_overview_effect = yes
+    }
+}
+
+tmm_manager_tab_dual = {
+    scope = character
+    effect = {
+        tmm_manager_open_current_dual_effect = yes
+    }
+}
+
+tmm_manager_tab_personal = {
+    scope = character
+    is_valid = {
+        OR = {
+            NOT = { has_variable = tmm_maa_window_open }
+            NOT = { exists = var:tmm_manager_dual_recipient }
+            this = var:tmm_manager_dual_recipient
+        }
+    }
+    effect = {
+        tmm_manager_open_personal_effect = yes
+    }
+}
+
+tmm_manager_resume = {
+    scope = character
+    effect = {
+        tmm_manager_resume_effect = yes
+    }
+}
+
+tmm_manager_close = {
+    scope = character
+    effect = {
+        tmm_manager_close_effect = yes
+    }
+}

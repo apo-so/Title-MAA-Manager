@@ -1,4 +1,4 @@
-# ===================================================
+﻿# ===================================================
 # 功能：将自身非首都直辖头衔下的头衔兵召回/集中至中央（绝对流向同步版）
 # 说明：通过send_option选兵种，将地方头衔兵集结至actor首都
 # ===================================================
@@ -14,6 +14,7 @@ tmm_rally_local_interaction = {
 	
 	# --- 一、交互是否显示 ---
 	is_shown = {
+        scope:actor = { has_variable = tmm_reserve_interactions_open }
 		scope:actor = scope:recipient
 		
 		scope:actor = {

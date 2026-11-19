@@ -1,9 +1,10 @@
-# ===================================================
+﻿# ===================================================
 # 功能：借兵 — 将头衔常备军控制权暂时移交给目标角色
 # 说明：选择自身头衔，将其非个人常备军转移至目标角色的主头衔
 # ===================================================
 tmm_lend_maa_interaction = {
 	category = interaction_category_diplomacy
+	common_interaction = yes
 	target_type = title
 	target_filter = actor_domain_titles # 选我自己的头衔
 	

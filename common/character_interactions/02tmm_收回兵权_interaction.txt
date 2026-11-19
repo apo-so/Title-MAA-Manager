@@ -1,4 +1,4 @@
-# ===================================================
+﻿# ===================================================
 # 功能：剥夺/收回封臣指定直属头衔下的头衔兵至中央（绝对流向同步版）
 # 说明：通过send_option选兵种，批量或逐个将封臣目标头衔兵收回至actor首都
 # ===================================================
@@ -14,6 +14,7 @@ tmm_revoke_from_vassal_interaction = {
 	
 	# --- 一、交互是否显示 ---
 	is_shown = {
+        scope:actor = { has_variable = tmm_reserve_interactions_open }
 		NOT = {
 			scope:actor = scope:recipient
 		}

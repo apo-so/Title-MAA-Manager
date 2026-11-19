@@ -1,0 +1,44 @@
+﻿tmm_show_reserve_interactions = {
+    category = interaction_category_diplomacy
+    interface_priority = 124
+    common_interaction = yes
+    icon = request_maa_interaction
+    desc = tmm_show_reserve_interactions_desc
+    use_diplomatic_range = no
+    ignores_pending_interaction_block = yes
+    needs_confirmation = { always = no }
+    auto_accept = yes
+    ai_potential = { always = no }
+    is_shown = {
+        scope:actor = {
+            is_ai = no
+            NOT = { has_variable = tmm_reserve_interactions_open }
+        }
+    }
+    on_send = {
+        scope:actor = { set_variable = { name = tmm_reserve_interactions_open value = yes } }
+    }
+}
+
+tmm_hide_reserve_interactions = {
+    category = interaction_category_diplomacy
+    interface_priority = 124
+    common_interaction = yes
+    icon = request_maa_interaction
+    desc = tmm_hide_reserve_interactions_desc
+    use_diplomatic_range = no
+    ignores_pending_interaction_block = yes
+    needs_confirmation = { always = no }
+    auto_accept = yes
+    ai_potential = { always = no }
+    is_shown = {
+        scope:actor = {
+            is_ai = no
+            has_variable = tmm_reserve_interactions_open
+        }
+    }
+    on_send = {
+        scope:actor = { remove_variable = tmm_reserve_interactions_open }
+    }
+}
+

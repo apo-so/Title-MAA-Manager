@@ -1,0 +1,30 @@
+﻿# ===================================================
+# 功能：转移头衔兵士 V5 — 自己版（天下兵马）
+# 说明：右键自己 → 打开窗口 → 选头衔 → 点兵团转移
+# ===================================================
+tmm_select_title_maa_self_interaction = {
+    category = interaction_category_diplomacy
+    interface_priority = 121
+    common_interaction = yes
+    icon = request_maa_interaction
+    desc = tmm_select_title_maa_self_interaction_desc
+    auto_accept = yes
+
+    # --- 一、显示条件（参照驻防地方） ---
+    is_shown = {
+        scope:actor = { has_variable = tmm_reserve_interactions_open }
+        scope:actor = scope:recipient
+        scope:actor = {
+            is_ai = no
+        }
+    }
+
+    # --- 二、执行（两侧均填充玩家自己的头衔） ---
+    on_accept = {
+        scope:recipient = {
+            save_scope_as = tmm_vassal
+            save_temporary_scope_as = tmm_manager_target
+        }
+        scope:actor = { tmm_manager_open_dual_effect = yes }
+    }
+}

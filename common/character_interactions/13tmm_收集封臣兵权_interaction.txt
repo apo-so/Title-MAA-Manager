@@ -1,4 +1,4 @@
-# ===================================================
+﻿# ===================================================
 # 功能：收集封臣兵权（精准版）
 # 说明：玩家从封臣的头衔兵池中精准选定一支兵团，收回至自己主头衔下。使用 men_at_arms 目标类型，可选支付金币补偿封臣。
 # 基于参考 mod 的 find_best_maa_interaction，已修复 random_held_title 为 primary_title。
@@ -21,6 +21,7 @@ tmm_collect_maa_from_vassal_interaction = {
 
 	# --- 交互是否显示 ---
 	is_shown = {
+        scope:actor = { has_variable = tmm_reserve_interactions_open }
 		NOT = { scope:actor = scope:recipient }
 
 		scope:recipient = {

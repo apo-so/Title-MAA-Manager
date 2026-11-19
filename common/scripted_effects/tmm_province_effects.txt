@@ -1,0 +1,68 @@
+﻿# Player scope. Clean older handoff data without touching any existing regiments.
+tmm_province_clear_request_effect = {
+    remove_variable = tmm_recruit_request_v2
+    remove_variable = tmm_recruit_seen_picker
+    remove_variable = tmm_province_pending
+    remove_variable = tmm_recruit_target
+    remove_variable = tmm_recruit_source
+    remove_variable = tmm_recruit_prepared
+    remove_variable = tmm_recruit_source_count
+    clear_variable_list = tmm_recruit_source_before
+    clear_variable_list = tmm_province_sources
+    clear_variable_list = tmm_province_before
+    clear_variable_list = tmm_province_new_regiments
+}
+
+tmm_province_snapshot_effect = {
+    save_temporary_scope_as = tmm_recruit_actor
+    var:tmm_recruit_source = {
+        every_owned_title_maa_regiment = {
+            save_temporary_scope_as = tmm_recruit_existing
+            scope:tmm_recruit_actor = {
+                add_to_variable_list = { name = tmm_recruit_source_before target = scope:tmm_recruit_existing }
+            }
+        }
+    }
+}
+
+tmm_recruit_resolve_effect = {
+    save_temporary_scope_as = tmm_recruit_actor
+    if = {
+        limit = { tmm_recruit_context_valid_trigger = yes }
+        var:tmm_recruit_source = { save_temporary_scope_as = tmm_recruit_source }
+        var:tmm_recruit_target = { save_temporary_scope_as = tmm_recruit_target }
+        set_variable = { name = tmm_recruit_source_count value = 0 }
+        scope:tmm_recruit_source = {
+            every_owned_title_maa_regiment = {
+                save_temporary_scope_as = tmm_recruit_candidate
+                scope:tmm_recruit_actor = {
+                    if = {
+                        limit = {
+                            NOT = {
+                                is_target_in_variable_list = { name = tmm_recruit_source_before target = scope:tmm_recruit_candidate }
+                            }
+                        }
+                        change_variable = { name = tmm_recruit_source_count add = 1 }
+                        scope:tmm_recruit_candidate = { save_temporary_scope_as = tmm_recruit_source_regiment }
+                    }
+                }
+            }
+        }
+        if = {
+            limit = {
+                var:tmm_recruit_source_count = 1
+                exists = scope:tmm_recruit_source_regiment
+            }
+            if = {
+                limit = { scope:tmm_recruit_source = scope:tmm_recruit_target }
+                set_variable = { name = tmm_recruit_success value = yes }
+            }
+            else = { tmm_recruit_move_created_effect = yes }
+        }
+        else_if = {
+            limit = { var:tmm_recruit_source_count > 1 }
+            set_variable = { name = tmm_recruit_failed value = yes }
+        }
+    }
+    else = { set_variable = { name = tmm_recruit_failed value = yes } }
+}

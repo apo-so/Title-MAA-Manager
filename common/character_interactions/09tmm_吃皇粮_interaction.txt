@@ -1,4 +1,4 @@
-# ===================================================
+﻿# ===================================================
 # 功能：吃皇粮 — 将个人常备军编入头衔编制
 # 说明：选择一支个人常备军（非头衔兵），将其转移至目标头衔下成为头衔兵士
 # ===================================================
@@ -23,6 +23,7 @@ tmm_set_title_maa_interaction = {
 		}
 	}
 	is_shown = {
+        scope:actor = { has_variable = tmm_reserve_interactions_open }
 		scope:actor = scope:recipient
 		#scope:actor != scope:recipient
 	}

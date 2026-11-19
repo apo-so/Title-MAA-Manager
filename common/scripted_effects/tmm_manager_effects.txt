@@ -1,0 +1,237 @@
+﻿# Root is the player character. Page switches keep the other views' selection and pending purchase.
+
+tmm_manager_forget_dual_effect = {
+    remove_variable = tmm_maa_window_open
+    every_in_list = { variable = tmm_vassal_titles remove_variable = tmm_v5_fv }
+    every_in_list = { variable = tmm_player_titles remove_variable = tmm_v5_fp }
+    clear_variable_list = tmm_vassal_titles
+    clear_variable_list = tmm_player_titles
+    clear_variable_list = tmm_vassal_regiments
+    clear_variable_list = tmm_player_regiments
+    remove_variable = tmm_has_vassal_title
+    remove_variable = tmm_has_player_title
+    remove_variable = tmm_v5_vassal_title
+    remove_variable = tmm_v5_player_title
+    remove_variable = tmm_v5_vassal_name
+    remove_variable = tmm_v5_player_name
+    remove_variable = tmm_manager_dual_recipient
+}
+
+tmm_manager_forget_personal_effect = {
+    # 关闭窗口
+    remove_variable = tmm_pt_window_open
+
+    # 清除每个头衔上的选中标记
+    every_in_list = {
+        variable = tmm_pt_title_list
+        remove_variable = tmm_pt_fv
+    }
+
+    # 清空所有列表
+    clear_variable_list = tmm_pt_title_list
+    clear_variable_list = tmm_pt_personal_list
+    clear_variable_list = tmm_pt_regiment_list
+    clear_variable_list = _tmp_regiments
+
+    # 清除所有 flag 和 scope 变量
+    remove_variable = tmm_pt_selected_title
+    remove_variable = tmm_pt_selected_name
+    remove_variable = tmm_pt_has_title
+    remove_variable = tmm_pt_has_personal
+}
+
+tmm_manager_forget_overview_effect = {
+    remove_variable = tmm_province_open
+    remove_variable = tmm_province_native_visit
+    remove_variable = tmm_province_title
+    clear_variable_list = tmm_province_regiments
+    tmm_province_clear_request_effect = yes
+    remove_variable = tmm_recruit_success
+    remove_variable = tmm_recruit_failed
+}
+
+tmm_manager_close_effect = {
+    if = {
+        limit = { has_variable = tmm_recruit_request_v2 }
+        close_view = { view = men_at_arms_type player = root }
+    }
+    tmm_manager_forget_dual_effect = yes
+    tmm_manager_forget_personal_effect = yes
+    tmm_manager_forget_overview_effect = yes
+}
+
+# CACHE is a character's saved variable list. WANT and DROP are distinct chain-local lists.
+# Only edit changed rows. An unchanged provider keeps its entries and ordering on tab return.
+tmm_manager_sync_list_effect = {
+    every_in_list = {
+        variable = $CACHE$
+        limit = { NOT = { is_in_list = $WANT$ } }
+        add_to_list = $DROP$
+    }
+    every_in_list = {
+        list = $DROP$
+        save_temporary_scope_as = tmm_manager_row
+        scope:tmm_manager_actor = {
+            remove_list_variable = { name = $CACHE$ target = scope:tmm_manager_row }
+        }
+    }
+    every_in_list = {
+        list = $WANT$
+        save_temporary_scope_as = tmm_manager_row
+        scope:tmm_manager_actor = {
+            if = {
+                limit = { NOT = { is_target_in_variable_list = { name = $CACHE$ target = scope:tmm_manager_row } } }
+                add_to_variable_list = { name = $CACHE$ target = scope:tmm_manager_row }
+            }
+        }
+    }
+}
+
+# Previous versions kept the two title lists, but did not store the counterpart on the actor.
+tmm_manager_recover_recipient_effect = {
+    if = {
+        limit = { NOT = { exists = var:tmm_manager_dual_recipient } }
+        save_temporary_scope_as = tmm_manager_actor
+        if = {
+            limit = { exists = var:tmm_v5_vassal_title.holder }
+            set_variable = { name = tmm_manager_dual_recipient value = var:tmm_v5_vassal_title.holder }
+        }
+        else = {
+            every_in_list = {
+                variable = tmm_vassal_titles
+                limit = { exists = holder NOT = { exists = scope:tmm_manager_legacy_title } }
+                save_temporary_scope_as = tmm_manager_legacy_title
+            }
+            if = {
+                limit = { exists = scope:tmm_manager_legacy_title.holder }
+                set_variable = { name = tmm_manager_dual_recipient value = scope:tmm_manager_legacy_title.holder }
+            }
+        }
+    }
+}
+
+tmm_manager_refresh_dual_effect = {
+    save_temporary_scope_as = tmm_manager_actor
+    if = {
+        limit = {
+            has_variable = tmm_has_vassal_title
+            OR = { NOT = { exists = var:tmm_v5_vassal_title } NOT = { var:tmm_v5_vassal_title ?= { holder = scope:tmm_manager_target } } }
+        }
+        var:tmm_v5_vassal_title ?= { remove_variable = tmm_v5_fv }
+        remove_variable = tmm_has_vassal_title
+        remove_variable = tmm_v5_vassal_title
+        remove_variable = tmm_v5_vassal_name
+    }
+    scope:tmm_manager_target = { every_held_title = { add_to_list = tmm_manager_want_vassal_titles } }
+    tmm_manager_sync_list_effect = { CACHE = tmm_vassal_titles WANT = tmm_manager_want_vassal_titles DROP = tmm_manager_want_vassal_titles_removed }
+    var:tmm_v5_vassal_title ?= { every_owned_title_maa_regiment = { add_to_list = tmm_manager_want_vassal_regiments } }
+    tmm_manager_sync_list_effect = { CACHE = tmm_vassal_regiments WANT = tmm_manager_want_vassal_regiments DROP = tmm_manager_want_vassal_regiments_removed }
+    if = {
+        limit = {
+            has_variable = tmm_has_player_title
+            OR = { NOT = { exists = var:tmm_v5_player_title } NOT = { var:tmm_v5_player_title ?= { holder = scope:tmm_manager_actor } } }
+        }
+        var:tmm_v5_player_title ?= { remove_variable = tmm_v5_fp }
+        remove_variable = tmm_has_player_title
+        remove_variable = tmm_v5_player_title
+        remove_variable = tmm_v5_player_name
+    }
+    scope:tmm_manager_actor = { every_held_title = { add_to_list = tmm_manager_want_player_titles } }
+    tmm_manager_sync_list_effect = { CACHE = tmm_player_titles WANT = tmm_manager_want_player_titles DROP = tmm_manager_want_player_titles_removed }
+    var:tmm_v5_player_title ?= { every_owned_title_maa_regiment = { add_to_list = tmm_manager_want_player_regiments } }
+    tmm_manager_sync_list_effect = { CACHE = tmm_player_regiments WANT = tmm_manager_want_player_regiments DROP = tmm_manager_want_player_regiments_removed }
+}
+
+tmm_manager_open_dual_effect = {
+    # tmm_manager_target is set by either the actual interaction or the saved counterpart.
+    tmm_manager_recover_recipient_effect = yes
+    if = {
+        limit = { exists = var:tmm_manager_dual_recipient var:tmm_manager_dual_recipient = scope:tmm_manager_target }
+        tmm_manager_refresh_dual_effect = yes
+    }
+    else = {
+        tmm_manager_forget_dual_effect = yes
+        set_variable = { name = tmm_manager_dual_recipient value = scope:tmm_manager_target }
+        tmm_manager_refresh_dual_effect = yes
+        tmm_v5_default_select_titles = yes
+    }
+    set_variable = { name = tmm_maa_window_open value = yes }
+    remove_variable = tmm_province_open
+    remove_variable = tmm_pt_window_open
+    remove_variable = tmm_province_native_visit
+}
+
+tmm_manager_open_current_dual_effect = {
+    tmm_manager_recover_recipient_effect = yes
+    if = {
+        limit = { exists = var:tmm_manager_dual_recipient }
+        var:tmm_manager_dual_recipient = { save_temporary_scope_as = tmm_manager_target }
+    }
+    else = { save_temporary_scope_as = tmm_manager_target }
+    tmm_manager_open_dual_effect = yes
+}
+
+tmm_manager_open_personal_effect = {
+    save_temporary_scope_as = tmm_manager_actor
+    if = {
+        limit = {
+            has_variable = tmm_pt_has_title
+            OR = { NOT = { exists = var:tmm_pt_selected_title } NOT = { var:tmm_pt_selected_title ?= { holder = scope:tmm_manager_actor } } }
+        }
+        var:tmm_pt_selected_title ?= { remove_variable = tmm_pt_fv }
+        remove_variable = tmm_pt_has_title
+        remove_variable = tmm_pt_selected_title
+        remove_variable = tmm_pt_selected_name
+    }
+    every_held_title = { add_to_list = tmm_manager_want_personal_titles }
+    tmm_manager_sync_list_effect = { CACHE = tmm_pt_title_list WANT = tmm_manager_want_personal_titles DROP = tmm_manager_want_personal_titles_removed }
+    every_maa_regiment = { limit = { is_title_maa_regiment = no } add_to_list = tmm_manager_want_personal_regiments }
+    tmm_manager_sync_list_effect = { CACHE = tmm_pt_personal_list WANT = tmm_manager_want_personal_regiments DROP = tmm_manager_want_personal_regiments_removed }
+    if = {
+        limit = { any_maa_regiment = { is_title_maa_regiment = no } }
+        set_variable = { name = tmm_pt_has_personal value = flag:yes }
+    }
+    else = { remove_variable = tmm_pt_has_personal }
+    set_variable = { name = tmm_pt_window_open value = yes }
+    remove_variable = tmm_province_open
+    remove_variable = tmm_maa_window_open
+    remove_variable = tmm_province_native_visit
+}
+
+tmm_manager_open_overview_effect = {
+    set_variable = { name = tmm_province_open value = yes }
+    remove_variable = tmm_maa_window_open
+    remove_variable = tmm_pt_window_open
+    remove_variable = tmm_province_native_visit
+    if = {
+        limit = { NOT = { has_variable = tmm_recruit_request_v2 } }
+        tmm_province_clear_request_effect = yes
+    }
+}
+
+tmm_manager_resume_effect = {
+    # The native picker is a transient window. A saved request must never be applied after reopening.
+    tmm_province_clear_request_effect = yes
+    # A native handoff re-enters the overview. A save from the separate-window build may have multiple open flags.
+    if = {
+        limit = { has_variable = tmm_province_native_visit }
+        tmm_manager_open_overview_effect = yes
+    }
+    else = {
+        if = {
+            limit = { has_variable = tmm_province_open }
+            remove_variable = tmm_maa_window_open
+            remove_variable = tmm_pt_window_open
+        }
+        else = {
+            if = {
+                limit = { has_variable = tmm_maa_window_open }
+                remove_variable = tmm_pt_window_open
+                if = {
+                    limit = { NOT = { exists = var:tmm_manager_dual_recipient } }
+                    tmm_manager_open_current_dual_effect = yes
+                }
+            }
+        }
+    }
+}

@@ -1,4 +1,4 @@
-# ===================================================
+﻿# ===================================================
 # 功能：裁撤冗兵（彻底修复误杀漏洞与性能补丁版）
 # 说明：通过send_option选兵种，直接销毁封臣目标头衔上的头衔兵士
 # ===================================================
@@ -8,7 +8,7 @@ tmm_disband_vassal_interaction = {
 	target_filter = recipient_domain_titles
 	icon = request_maa_interaction
 	interface_priority = 100
-	common_interaction = no
+	common_interaction = yes
 	desc = tmm_disband_vassal_interaction_desc
 	auto_accept = yes
 	

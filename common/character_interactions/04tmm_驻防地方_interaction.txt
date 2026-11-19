@@ -1,4 +1,4 @@
-# ===================================================
+﻿# ===================================================
 # 功能：将自身首都头衔兵下放部署至非首都的其他直辖地方头衔（绝对流向同步版）
 # 说明：通过send_option选兵种，将首都兵驻防至直辖地方头衔
 # ===================================================
@@ -14,6 +14,7 @@ tmm_garrison_local_interaction = {
 	
 	# --- 一、交互是否显示 ---
 	is_shown = {
+        scope:actor = { has_variable = tmm_reserve_interactions_open }
 		scope:actor = scope:recipient
 
 		scope:actor = {

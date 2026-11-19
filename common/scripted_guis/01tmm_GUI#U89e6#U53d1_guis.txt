@@ -1,4 +1,4 @@
-# ===================================================
+﻿# ===================================================
 # 功能：GUI 宏 — 为窗口界面添加头衔兵士
 # 说明：在 GUI 交互中将首都头衔兵士复制到目标头衔并删除源兵团
 # ===================================================
@@ -603,21 +603,7 @@ tmm_window_transfer_all = {
 
 tmm_v5_close_window = {
     scope = character
-    effect = {
-        remove_variable = tmm_maa_window_open
-        every_in_list = { variable = tmm_vassal_titles remove_variable = tmm_v5_fv }
-        every_in_list = { variable = tmm_player_titles remove_variable = tmm_v5_fp }
-        clear_variable_list = tmm_vassal_titles
-        clear_variable_list = tmm_player_titles
-        clear_variable_list = tmm_vassal_regiments
-        clear_variable_list = tmm_player_regiments
-        remove_variable = tmm_has_vassal_title
-        remove_variable = tmm_has_player_title
-        remove_variable = tmm_v5_vassal_title
-        remove_variable = tmm_v5_player_title
-        remove_variable = tmm_v5_vassal_name
-        remove_variable = tmm_v5_player_name
-    }
+    effect = { tmm_manager_close_effect = yes }
 }
 
 # --- 清除左右选择，但不关闭窗口 ---
@@ -969,28 +955,7 @@ tmm_pt_clear_selection = {
 
 tmm_pt_close_window = {
     scope = character
-    effect = {
-        # 关闭窗口
-        remove_variable = tmm_pt_window_open
-
-        # 清除每个头衔上的选中标记
-        every_in_list = {
-            variable = tmm_pt_title_list
-            remove_variable = tmm_pt_fv
-        }
-
-        # 清空所有列表
-        clear_variable_list = tmm_pt_title_list
-        clear_variable_list = tmm_pt_personal_list
-        clear_variable_list = tmm_pt_regiment_list
-        clear_variable_list = _tmp_regiments
-
-        # 清除所有 flag 和 scope 变量
-        remove_variable = tmm_pt_selected_title
-        remove_variable = tmm_pt_selected_name
-        remove_variable = tmm_pt_has_title
-        remove_variable = tmm_pt_has_personal
-    }
+    effect = { tmm_manager_close_effect = yes }
 }
 
 # === 十五、PT 窗口 — 选中头衔（saved_scopes 模式）===

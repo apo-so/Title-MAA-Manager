@@ -1,0 +1,39 @@
+﻿tmm_province_interaction = {
+    category = interaction_category_diplomacy
+    interface_priority = 122
+    common_interaction = yes
+    icon = request_maa_interaction
+    desc = tmm_province_interaction_desc
+
+    is_shown = {
+        scope:actor = { is_ai = no }
+        OR = {
+            scope:actor = scope:recipient
+            scope:recipient = { is_vassal_or_below_of = scope:actor }
+        }
+    }
+    needs_confirmation = { always = no }
+    auto_accept = yes
+    on_accept = {
+        if = {
+            limit = { scope:actor = scope:recipient }
+            scope:actor = {
+            tmm_manager_recover_recipient_effect = yes
+            if = {
+                limit = { exists = var:tmm_manager_dual_recipient NOT = { this = var:tmm_manager_dual_recipient } }
+                tmm_manager_forget_dual_effect = yes
+            }
+            tmm_manager_open_overview_effect = yes
+        }
+        }
+        else = {
+            scope:recipient = {
+                save_scope_as = tmm_vassal
+                save_temporary_scope_as = tmm_manager_target
+            }
+            scope:actor = { tmm_manager_open_dual_effect = yes }
+        }
+    }
+    ai_potential = { always = no }
+    ai_will_do = { base = 0 }
+}

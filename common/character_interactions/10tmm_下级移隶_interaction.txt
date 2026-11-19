@@ -1,4 +1,4 @@
-# ===================================================
+﻿# ===================================================
 # 功能：下级移隶 — 将下属总督持有的头衔兵移交给指定总督
 # 说明：触发事件让玩家选择要移隶的下级总督层级
 # ===================================================
@@ -17,6 +17,7 @@ tmm_subordinate_reassign_interaction = {
     auto_accept = yes
 
     is_shown = {
+        scope:actor = { has_variable = tmm_reserve_interactions_open }
         scope:actor = {
             is_ai = no
         }

@@ -31,6 +31,8 @@ def run(repo: Path, manifest_file: Path) -> int:
         digest = hashlib.sha256(data).hexdigest()
         if digest != item["sha256"]:
             errors.append(f"SHA256_MISMATCH: {name}")
+        if item.get("binary", False):
+            continue
         if data.startswith(b"\xef\xbb\xbf") != bool(item["bom"]):
             errors.append(f"BOM_MISMATCH: {name}")
         if data.count(b"\r\n") != item["crlf"]:
@@ -43,6 +45,10 @@ def run(repo: Path, manifest_file: Path) -> int:
     for name in manifest.get("known_exclusions", []):
         if not (repo / name).is_file():
             warnings.append(f"EXCLUDED_GUI_REQUIRES_SEPARATE_REVIEW: {name}")
+
+    for name in manifest.get("forbidden_overrides", []):
+        if (repo / name).exists():
+            errors.append(f"VANILLA_OVERRIDE_PRESENT: {name}")
 
     verified_count = len(files) - sum(e.startswith("MISSING:") for e in errors)
     print(f"Snapshot: {manifest['source_snapshot']}")
@@ -63,7 +69,7 @@ def main() -> int:
     parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--manifest", type=Path)
     args = parser.parse_args()
-    return run(args.repo, args.manifest or args.repo / "docs" / "源码清单_20261017.json")
+    return run(args.repo, args.manifest or args.repo / "docs" / "源码清单_20261119.json")
 
 
 if __name__ == "__main__":
