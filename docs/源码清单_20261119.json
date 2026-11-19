@@ -3,7 +3,7 @@
   "project": "Title-MAA-Manager",
   "source_snapshot": "2026.11.19.15",
   "steam_item": "3636472421",
-  "steam_manifest": "5265670677652194035",
+  "steam_manifest": "8236302441041255815",
   "files": [
     {
       "path": "common/character_interactions/01tmm_赐予兵权_interaction.txt",
@@ -273,8 +273,8 @@
     },
     {
       "path": "thumbnail.png",
-      "bytes": 135740,
-      "sha256": "8a03faf8ae37446361b0a98d082fb7b37275875cb8990642aa079ebc1aa79ac8",
+      "bytes": 817055,
+      "sha256": "f2ea6139aa1d691d417f00024993a91d808e1d1328625fc99ba8bad0d2c3cc3d",
       "binary": true
     }
   ],
